@@ -1,15 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import logImg from './assets/log-img.png';
 import aboutStoryImg from './assets/about-story.png';
-import teamHossam from './assets/team/hossam.png';
-import teamAmmar from './assets/team/ammar.png';
-import teamRahma from './assets/team/rahma.png';
+import meetOurTeamImg from './assets/meet-our-team.png';
 import PartnerPage from './PartnerPage.jsx';
 
 export default function App() {
+  const normalizePage = (hash) => {
+    const h = String(hash || '').trim();
+    const key = h.startsWith('#') ? h.slice(1) : h;
+    const pageKey = key.toLowerCase();
+    if (!pageKey || pageKey === 'home') return 'home';
+    if (pageKey === 'partner') return 'partner';
+    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk']);
+    return allowed.has(pageKey) ? pageKey : 'home';
+  };
+
   const year = useMemo(() => new Date().getFullYear(), []);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showPartner, setShowPartner] = useState(false);
+  const [page, setPage] = useState(() => normalizePage(window.location.hash));
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
   const [theme, setTheme] = useState(() => {
@@ -23,7 +32,12 @@ export default function App() {
   });
 
   useEffect(() => {
-    const onHash = () => setShowPartner(window.location.hash === '#partner');
+    const onHash = () => {
+      const nextPage = normalizePage(window.location.hash);
+      setPage(nextPage);
+      setShowPartner(nextPage === 'partner');
+      if (nextPage !== 'home' && nextPage !== 'partner') setActiveSection(nextPage);
+    };
     onHash();
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
@@ -39,6 +53,12 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    if (page === 'partner') return;
+    // When switching to a "page" view, jump to top for clarity.
+    window.scrollTo({ top: 0, left: 0, behavior: page === 'home' ? 'auto' : 'smooth' });
+  }, [page]);
+
+  useEffect(() => {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 8);
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -47,10 +67,10 @@ export default function App() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [showPartner]);
+  }, [showPartner, page]);
 
   useEffect(() => {
-    if (showPartner) return;
+    if (showPartner || page !== 'home') return;
     const sections = [
       { id: 'home', el: document.getElementById('home') },
       { id: 'about', el: document.getElementById('about') },
@@ -70,7 +90,7 @@ export default function App() {
     );
     sections.forEach(({ el }) => observer.observe(el));
     return () => observer.disconnect();
-  }, [showPartner]);
+  }, [showPartner, page]);
 
   useEffect(() => {
     // Arc stroke length variable
@@ -116,10 +136,15 @@ export default function App() {
     addReveal('.hero-title, .hero-sub', 'reveal-up', 80, 0);
     addReveal('.section-title', 'reveal-left', 80, 0);
     addReveal('.product-row .badge', 'reveal-up', 80, 100);
-    addReveal('.team-v2-grid .team-v2-card', 'reveal-up', 90, 80);
-    addReveal('.service-row', 'reveal-up', 120, 0);
-    addReveal('.about p, .about-list li', 'reveal-up', 40, 0);
+    addReveal('.team-v2-panel--image', 'reveal-up', 0, 0);
+    addReveal('.services-arc-wrap, .services-hero-title, .services-hero-sub', 'reveal-up', 0, 0);
+    addReveal('.service-card', 'reveal-up', 90, 0);
+    addReveal('.cta-panel', 'reveal-up', 0, 0);
+    addReveal('.about-media-card, .about-content, .about-stats .stat-card, .about-points li, .vision-card', 'reveal-up', 70, 0);
+    addReveal('.contacts-arc-wrap, .contacts-hero-title, .contacts-hero-sub', 'reveal-up', 0, 0);
+    addReveal('.contact-form-card, .contact-card, .contact-map', 'reveal-up', 90, 0);
     addReveal('.social-row .social-icon', 'reveal-up', 60, 0);
+    addReveal('.faq-item', 'reveal-up', 90, 0);
 
     return () => revealObserver?.disconnect();
   }, []);
@@ -134,24 +159,27 @@ export default function App() {
   };
 
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
+  const isHomePage = page === 'home';
+  const shouldShow = (id) => isHomePage || page === id;
+  const isItHelpdeskPage = page === 'it-helpdesk';
 
   return (
     <>
-      {!showPartner && (
+      {isHomePage && !showPartner && (
         <div className="scroll-progress" role="progressbar" aria-valuenow={Math.round(scrollProgress)} aria-valuemin={0} aria-valuemax={100}>
           <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
         </div>
       )}
       <header className={`site-header${isScrolled ? ' scrolled' : ''}`}>
         <div className="container header-inner">
-          <a href="#" className="brand brand-flex" aria-label="Octa home">
+          <a href="#home" className="brand brand-flex" aria-label="Octa home">
             <img src={logImg} alt="Octa" className="brand-logo-img" />
           </a>
           <div className="header-actions">
             <nav className="nav">
-              <a href="#" className={activeSection === 'home' ? 'active' : ''}>Home</a>
+              <a href="#home" className={activeSection === 'home' ? 'active' : ''}>Home</a>
               <a href="#about" className={activeSection === 'about' ? 'active' : ''}>About</a>
-              <a href="#services" className={activeSection === 'services' ? 'active' : ''}>Services</a>
+              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' ? 'active' : ''}>Services</a>
               <a href="#contacts" className={activeSection === 'contacts' ? 'active' : ''}>Contacts</a>
               <a href="#faqs" className={activeSection === 'faqs' ? 'active' : ''}>FAQs</a>
             </nav>
@@ -194,6 +222,7 @@ export default function App() {
         </div>
       ) : (
       <main id="home">
+        {isHomePage && (
         <section className="hero">
           <div className="container hero-inner">
             <div className="arc-wrap">
@@ -231,8 +260,10 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
-        <section className="section products">
+        {shouldShow('products') && (
+        <section id="products" className="section products">
           <div className="container">
             <h2 className="section-title">
               <span className="bullet"></span>Our products
@@ -250,7 +281,41 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
+        {shouldShow('team') && (
+        <section className="section team-v2 team-v2-image" id="team">
+          <div className="container">
+            <div className="team-v2-panel team-v2-panel--image" aria-label="Meet our team">
+              <img
+                className="team-v2-image-img"
+                src={meetOurTeamImg}
+                alt="Meet our team"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </section>
+        )}
+
+        {(isHomePage || page === 'team') && (
+        <section className="section cta-callout" aria-label="Start a conversation">
+          <div className="container">
+            <div className="cta-panel">
+              <h2 className="cta-title">Ready to Redefine Your Project?</h2>
+              <p className="cta-subtitle">
+                Harness the power of Egypt&apos;s finest freelancers. From specialized design to complex technical
+                architecture, Always You Can with OCTA.
+              </p>
+              <a className="cta-button" href="#contacts">
+                Start a Conversation
+              </a>
+            </div>
+          </div>
+        </section>
+        )}
+
+        {shouldShow('about') && (
         <section id="about" className="section about">
           <div className="container">
             <h2 className="section-title">
@@ -259,10 +324,7 @@ export default function App() {
             <div className="about-story-grid">
               <div className="about-media" aria-hidden="true">
                 <div className="about-media-card">
-                  <div
-                    className="about-media-img"
-                    style={{ '--about-img': `url(${aboutStoryImg})` }}
-                  />
+                  <div className="about-media-img" style={{ '--about-img': `url(${aboutStoryImg})` }} />
                   <div className="about-media-caption">The birth of a unified force.</div>
                 </div>
               </div>
@@ -285,11 +347,11 @@ export default function App() {
                 <div className="about-stats">
                   <div className="stat-card">
                     <div className="stat-number">5+</div>
-                    <div className="stat-label">Years experience</div>
+                    <div className="stat-label">FREELANCERS</div>
                   </div>
                   <div className="stat-card">
                     <div className="stat-number">12+</div>
-                    <div className="stat-label">Projects delivered</div>
+                    <div className="stat-label">PROJECTS DONE</div>
                   </div>
                 </div>
               </div>
@@ -317,6 +379,7 @@ export default function App() {
                     the digital frontier.
                   </p>
                 </div>
+
                 <div className="vision-card">
                   <div className="vision-icon badge-console" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
@@ -332,6 +395,7 @@ export default function App() {
                     Architectures.
                   </p>
                 </div>
+
                 <div className="vision-card">
                   <div className="vision-icon badge-design" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
@@ -351,188 +415,434 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
-        <section className="section team-v2" id="team">
-          <div className="container">
-            <div className="team-v2-panel">
-              <h2 className="section-title team-v2-title">
-                <span className="bullet"></span>MEET OUR TEAM
-              </h2>
-              <p className="team-v2-subtitle">The minds behind the innovation at Octa.</p>
-
-              <div className="team-v2-grid">
-                <article className="team-v2-card team-v2-card--photo">
-                  <img className="team-v2-img" src={teamHossam} alt="Hossam Hassan" loading="lazy" />
-                  <div className="team-v2-meta">
-                    <h3>Hossam Hassan</h3>
-                    <p className="team-v2-role">CEO FOUNDER &amp; IT MANAGER</p>
-                  </div>
-                </article>
-
-                <article className="team-v2-card team-v2-card--photo">
-                  <img className="team-v2-img" src={teamAmmar} alt="Ammar Tarek" loading="lazy" />
-                  <div className="team-v2-meta">
-                    <h3>Ammar Tarek</h3>
-                    <p className="team-v2-role">CREATIVE DIRECTOR</p>
-                  </div>
-                </article>
-
-                <article className="team-v2-card team-v2-card--photo">
-                  <img className="team-v2-img" src={teamRahma} alt="Rahma Sameh" loading="lazy" />
-                  <div className="team-v2-meta">
-                    <h3>Rahma Sameh</h3>
-                    <p className="team-v2-role">WEB DEVELOPER</p>
-                  </div>
-                </article>
-
-                <article className="team-v2-card team-v2-card--join">
-                  <div className="team-v2-plus" aria-hidden="true">+</div>
-                  <h3>Join OCTA</h3>
-                  <p className="team-v2-join-sub">Are you an elite freelancer?</p>
-                  <a className="team-v2-apply" href="#contacts">
-                    APPLY NOW
-                  </a>
-                </article>
+        {shouldShow('services') && (
+        <section id="services" className="section services">
+          {page === 'services' && (
+            <div className="container services-hero">
+              <div className="services-arc-wrap" aria-hidden="true">
+                <svg className="services-arc" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet">
+                  <defs>
+                    <filter id="servicesGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="10" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                    <linearGradient id="servicesArcG" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0" stopColor="#ccff33" />
+                      <stop offset="1" stopColor="#a3ff30" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 120 300 A 380 380 0 0 1 880 300"
+                    stroke="url(#servicesArcG)"
+                    strokeWidth="18"
+                    fill="none"
+                    filter="url(#servicesGlow)"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="services-hero-text">
+                  <h1 className="services-hero-title">
+                    Our <span className="accent">Services</span>.
+                  </h1>
+                  <p className="services-hero-sub">
+                    Ready to elevate your digital presence? Reach out to our team of experts for sophisticated technological
+                    expertise and design.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          )}
 
-        <section id="services" className="section services">
           <div className="container">
             <h2 className="section-title">
               <span className="bullet"></span>Services
             </h2>
+            <div className="services-grid">
+              <a href="#it-helpdesk" className="service-card service-card-link">
+                <div className="service-card-icon service-card-icon--it" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path
+                      fill="currentColor"
+                      d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7A2.5 2.5 0 0 1 17.5 16h-4.2l.7 2H16a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h1.9l.7-2H6.5A2.5 2.5 0 0 1 4 13.5v-7Z"
+                    />
+                  </svg>
+                </div>
+                <h3>IT Infrastructure &amp; Helpdesk</h3>
+                <ul className="service-card-list">
+                  <li><span className="service-bullet service-bullet--it" aria-hidden="true" />Cloud Management</li>
+                  <li><span className="service-bullet service-bullet--it" aria-hidden="true" />Security Service</li>
+                  <li><span className="service-bullet service-bullet--it" aria-hidden="true" />Manage Microsoft Azure Services</li>
+                  <li><span className="service-bullet service-bullet--it" aria-hidden="true" />Monitoring Service</li>
+                </ul>
+              </a>
 
-            <div className="service-row">
-              <div className="service-content">
-                <h3>1. Helpdesk Support</h3>
-                <p>
-                  Helpdesk support is a service that provides technical assistance to customers or end users. It’s often
-                  the first point of contact for users who need help with their computer systems, software, or other
-                  technical issues. Customers can contact the helpdesk to report issues, request assistance with technical
-                  problems, or ask questions about how to use a particular product or service.
-                </p>
-              </div>
-              <div className="service-icon badge-it" aria-hidden="true">
-                it
-              </div>
+              <article className="service-card">
+                <div className="service-card-icon service-card-icon--design" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path
+                      fill="currentColor"
+                      d="M12 2a10 10 0 1 0 0 20 2 2 0 0 0 2-2c0-.5-.2-1-.6-1.4-.3-.3-.4-.7-.3-1.1.1-.4.5-.7.9-.7h2.2A4.8 4.8 0 0 0 21 12.2C21 6.6 16.5 2 12 2Z"
+                    />
+                  </svg>
+                </div>
+                <h3>Creative Design Services</h3>
+                <ul className="service-card-list">
+                  <li><span className="service-bullet service-bullet--design" aria-hidden="true" />UX/UI Interface Design</li>
+                  <li><span className="service-bullet service-bullet--design" aria-hidden="true" />Brand Identity &amp; Logo</li>
+                  <li><span className="service-bullet service-bullet--design" aria-hidden="true" />Graphic Illustration</li>
+                  <li><span className="service-bullet service-bullet--design" aria-hidden="true" />Printing Services</li>
+                </ul>
+              </article>
+
+              <article className="service-card">
+                <div className="service-card-icon service-card-icon--web" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path
+                      fill="currentColor"
+                      d="M8.7 17.3a1 1 0 0 1 0-1.4L12.6 12 8.7 8.1a1 1 0 0 1 1.4-1.4l4.6 4.6a1 1 0 0 1 0 1.4l-4.6 4.6a1 1 0 0 1-1.4 0Z"
+                    />
+                  </svg>
+                </div>
+                <h3>Web Development</h3>
+                <ul className="service-card-list">
+                  <li><span className="service-bullet service-bullet--web" aria-hidden="true" />Custom Web Applications</li>
+                  <li><span className="service-bullet service-bullet--web" aria-hidden="true" />E-commerce Solutions</li>
+                  <li><span className="service-bullet service-bullet--web" aria-hidden="true" />API Integration</li>
+                  <li><span className="service-bullet service-bullet--web" aria-hidden="true" />Performance Optimization</li>
+                </ul>
+              </article>
             </div>
-
-            <div className="service-row">
-              <div className="service-content">
-                <h3>2. Network and System Administration</h3>
-                <p>
-                  Network administrators design, implement, and maintain secure computer networks, configuring hardware
-                  and software, managing user accounts and permissions, and monitoring/optimizing performance. System
-                  administrators maintain servers, applications, and operating systems while enforcing security and
-                  backup policies.
-                </p>
-              </div>
-              <div className="service-icon badge-it" aria-hidden="true">
-                it
-              </div>
-            </div>
-
-            <div className="service-row">
-              <div className="service-content">
-                <h3>3. Cloud migration and management</h3>
-                <p>
-                  We assess, plan, and migrate applications and data from on‑prem environments to the cloud. Post‑migration
-                  we handle cost optimization, visibility, security baselines, and reliability.
-                </p>
-              </div>
-              <div className="service-icon badge-console" aria-hidden="true">
-                console
-              </div>
-            </div>
-
-            <div className="service-row">
-              <div className="service-content">
-                <h3>Cloud Console</h3>
-                <p>
-                  A centralized platform to manage, monitor, and optimize your cloud resources: role‑based access,
-                  automation pipelines, observability, and cost control. Whether you’re deploying apps, managing
-                  workloads, or analyzing data, Cloud Console simplifies operations while ensuring scalability and
-                  security.
-                </p>
-              </div>
-              <div className="service-icon badge-console" aria-hidden="true">
-                console
-              </div>
-            </div>
-
-            <div className="service-row">
-              <div className="service-content">
-                <h3>Octa Design</h3>
-                <p>
-                  We craft stunning and user‑friendly digital experiences tailored to your brand: websites, social media
-                  graphics, logo ing, and brand identity systems. From landing pages to full brand refreshes, we turn ideas
-                  into beautiful, practical interfaces.
-                </p>
-              </div>
-              <div className="service-icon badge-design" aria-hidden="true">
-                design
-              </div>
-            </div>
-
           </div>
         </section>
+        )}
 
+        {shouldShow('contacts') && (
         <section id="contacts" className="section contacts form-section">
+          {page === 'contacts' && (
+            <div className="container contacts-hero">
+              <div className="contacts-arc-wrap" aria-hidden="true">
+                <svg className="contacts-arc" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet">
+                  <defs>
+                    <filter id="contactsGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="10" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                    <linearGradient id="contactsArcG" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0" stopColor="#ccff33" />
+                      <stop offset="1" stopColor="#a3ff30" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 120 300 A 380 380 0 0 1 880 300"
+                    stroke="url(#contactsArcG)"
+                    strokeWidth="18"
+                    fill="none"
+                    filter="url(#contactsGlow)"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="contacts-hero-text">
+                  <h1 className="contacts-hero-title">
+                    Let&apos;s <span className="accent">Connect</span>.
+                  </h1>
+                  <p className="contacts-hero-sub">
+                    Ready to elevate your digital presence? Reach out to our team of experts for sophisticated technological
+                    expertise and design.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="container">
-            <h2 className="section-title">
-              <span className="bullet"></span>Contacts
-            </h2>
-            <div className="social-row">
-              <a className="social-icon" href="mailto:info@octamesh.co" aria-label="Email">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="3" y="5" width="18" height="14" rx="2" />
-                  <path d="M3 7l9 6 9-6" />
-                </svg>
-              </a>
-              <a className="social-icon" href="tel:+201020300393" aria-label="Phone">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.77.62 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.48-1.48a2 2 0 0 1 2.11-.45c.83.29 1.7.5 2.6.62A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </a>
-              <a className="social-icon" href="https://wa.me/201020300393" target="_blank" rel="noopener" aria-label="WhatsApp">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M20.52 3.49A11.79 11.79 0 0 0 12.07 1C6.08 1 1.2 5.82 1.2 11.76c0 2.09.55 4.1 1.6 5.88L1 23l5.52-1.77a11.9 11.9 0 0 0 5.55 1.4h.01c5.99 0 10.87-4.82 10.87-10.76 0-2.88-1.16-5.59-3.43-7.38z" />
-                  <path d="M8.86 7.95c-.2-.47-.41-.48-.6-.5H7.7c-.2 0-.5.07-.76.36s-1 1-1 2.44 1.02 2.83 1.16 3.03c.14.2 2.02 3.24 5 4.41 2.47.98 2.97.78 3.51.73.54-.05 1.73-.71 1.98-1.41.25-.7.25-1.31.18-1.44-.07-.13-.27-.2-.57-.35-.3-.15-1.73-.85-2-.95-.27-.1-.46-.15-.66.16-.2.31-.76.95-.94 1.15-.18.2-.35.23-.65.08-.3-.15-1.26-.47-2.4-1.5-.89-.78-1.49-1.73-1.67-2.03-.18-.3-.02-.47.13-.62.13-.13.3-.35.45-.53.15-.18.2-.3.31-.51.1-.2.05-.39-.03-.54-.08-.15-.63-1.56-.86-2.14z" />
-                </svg>
-              </a>
-              <a className="social-icon" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                </svg>
-              </a>
-              <a className="social-icon" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-              </a>
+            <div className="contacts-grid">
+              <div className="team-v2-panel contact-form-card">
+                <h2 className="contact-form-title">
+                  <span className="bullet"></span>Send us a message
+                </h2>
+                <form
+                  className="contact-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const fd = new FormData(e.currentTarget);
+                    onSubmitLead(Object.fromEntries(fd.entries()));
+                    e.currentTarget.reset();
+                  }}
+                >
+                  <div className="contact-form-row">
+                    <div className="field">
+                      <label htmlFor="contact_name">Your Name</label>
+                      <input id="contact_name" name="name" placeholder="John Doe" required />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="contact_email">Email Address</label>
+                      <input id="contact_email" name="email" type="email" placeholder="john@example.com" required />
+                    </div>
+                  </div>
+
+                  <div className="field">
+                    <label htmlFor="contact_subject">Subject</label>
+                    <select id="contact_subject" name="subject" defaultValue="IT Consultation">
+                      <option>IT Consultation</option>
+                      <option>Web Development</option>
+                      <option>Design</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div className="field">
+                    <label htmlFor="contact_message">Message</label>
+                    <textarea id="contact_message" name="message" rows={4} placeholder="Tell us about your project..." required />
+                  </div>
+
+                  <button type="submit" className="btn btn-submit btn-primary contact-submit">
+                    Send Message
+                  </button>
+                </form>
+              </div>
+
+              <div className="contact-right">
+                <div className="contact-cards">
+                  <a className="contact-card" href="https://wa.me/201020300393" target="_blank" rel="noopener noreferrer">
+                    <span className="contact-card-icon contact-card-icon--wa" aria-hidden="true">✆</span>
+                    <span className="contact-card-kicker">WHATSAPP</span>
+                    <span className="contact-card-value">+20 10 20300393</span>
+                  </a>
+                  <a className="contact-card" href="tel:+201020300393">
+                    <span className="contact-card-icon contact-card-icon--phone" aria-hidden="true">☎</span>
+                    <span className="contact-card-kicker">PHONE</span>
+                    <span className="contact-card-value">+20 10 20300393</span>
+                  </a>
+                  <a className="contact-card" href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                    <span className="contact-card-icon contact-card-icon--fb" aria-hidden="true">◎</span>
+                    <span className="contact-card-kicker">FACEBOOK</span>
+                    <span className="contact-card-value">Octa.mesh</span>
+                  </a>
+                  <a className="contact-card" href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                    <span className="contact-card-icon contact-card-icon--in" aria-hidden="true">in</span>
+                    <span className="contact-card-kicker">LINKEDIN</span>
+                    <span className="contact-card-value">OCTA MESH</span>
+                  </a>
+                </div>
+
+                <div className="team-v2-panel contact-map">
+                  <div className="contact-map-inner" aria-label="Location map">
+                    <div className="contact-map-chip">
+                      <div className="contact-map-pin" aria-hidden="true" />
+                      <div className="contact-map-chip-text">
+                        <div className="contact-map-chip-title">Tech District</div>
+                        <div className="contact-map-chip-sub">CAIRO, DOKKI, EG 72241</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
+        )}
+
+        {shouldShow('faqs') && (
+        <section id="faqs" className="section faqs">
+          <div className="container">
+            <div className="team-v2-panel faq-panel" aria-label="FAQs">
+              <h2 className="section-title">
+                <span className="bullet"></span>FAQs
+              </h2>
+              <div className="faq-list">
+                <details className="faq-item">
+                  <summary>How do I contact Octa?</summary>
+                  <p>Use the Contacts section to reach us by email, phone, or WhatsApp.</p>
+                </details>
+                <details className="faq-item">
+                  <summary>Do you work with small and mid-level businesses?</summary>
+                  <p>Yes. We support teams of different sizes with IT, cloud, and design services.</p>
+                </details>
+                <details className="faq-item">
+                  <summary>Can I become an Octa partner?</summary>
+                  <p>Yes—click “Become an Octa partner” in the header to open the partner page.</p>
+                </details>
+              </div>
+            </div>
+          </div>
+        </section>
+        )}
+
+        {isItHelpdeskPage && (
+        <section id="it-helpdesk" className="section it-helpdesk-page">
+          <div className="container">
+            <div className="it-helpdesk-hero">
+              <div className="it-helpdesk-hero-icon" aria-hidden="true">
+                <span className="it-helpdesk-i">I</span>
+                <span className="it-helpdesk-t">T</span>
+              </div>
+              <h1 className="it-helpdesk-title">IT Infrastructure &amp; Helpdesk</h1>
+              <p className="it-helpdesk-subtitle">
+                Reliable, scalable, and secure technology foundations designed to empower your enterprise growth and maintain operational continuity.
+              </p>
+              <div className="it-helpdesk-ctas">
+                <a href="#contacts" className="btn-it-order">
+                  ORDER THIS SERVICE
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                  </svg>
+                </a>
+                <button type="button" className="it-helpdesk-explore" onClick={() => window.location.hash = '#services'}>
+                  Explore Sub-services
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div className="it-helpdesk-list">
+              <article className="it-helpdesk-block">
+                <div className="it-helpdesk-block-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96Z" /></svg>
+                </div>
+                <h3>Cloud Management</h3>
+                <p>We architect and manage robust cloud environments tailored to your specific needs. From AWS to Azure solutions—our team ensures seamless migration, cost optimization, and high-performance scalability that evolves alongside your business demands.</p>
+              </article>
+              <article className="it-helpdesk-block">
+                <div className="it-helpdesk-block-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" /></svg>
+                </div>
+                <h3>Security Service</h3>
+                <p>Our proactive security approach protects your critical assets. We implement advanced firewalls, intrusion detection systems, and end-to-end encryption to safeguard your data against evolving cyber threats, ensuring compliance and peace of mind.</p>
+              </article>
+              <article className="it-helpdesk-block">
+                <div className="it-helpdesk-block-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.65.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .32.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z" /></svg>
+                </div>
+                <h3>Manage Microsoft Azure Services</h3>
+                <p>Downtime isn&apos;t an option. Our dedicated helpdesk team provides around-the-clock support to resolve technical issues instantly. Whether it&apos;s hardware troubleshooting or software integration, we are your reliable partner in maintaining workflow efficiency.</p>
+              </article>
+              <article className="it-helpdesk-block">
+                <div className="it-helpdesk-block-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3.5 18.5L9.5 12.5l4 4L20.5 7v11H3.5z" /></svg>
+                </div>
+                <h3>Monitoring Service</h3>
+                <p>Proactive monitoring and regular updates keep your servers running at peak performance. We handle patching, performance tuning, and backup management so your infrastructure remains stable, fast, and resilient under heavy workloads.</p>
+              </article>
+            </div>
+
+            <div className="it-helpdesk-order-row">
+              <a href="#contacts" className="btn-it-order">
+                ORDER THIS SERVICE
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                </svg>
+              </a>
+              <p className="it-helpdesk-assist">Need assistance? Talk to our team.</p>
+            </div>
+
+            <div className="it-helpdesk-custom-strip">
+              <p className="it-helpdesk-custom-title">Need a custom enterprise solution?</p>
+              <a href="#contacts" className="btn-it-expert">Talk to an Expert</a>
+            </div>
+          </div>
+        </section>
+        )}
       </main>
       )}
 
       <footer className="site-footer">
-        <div className="container footer-inner">
-          <p className="footer-credit">
-            © <span>{year}</span> Octa. Built by{' '}
-            <a
-              href="https://www.linkedin.com/in/rahma-sameh/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Rahma Sameh
-            </a>{' '}
-            · <a href="mailto:rahma.sameh@octamesh.co">rahma.sameh@octamesh.co</a>
-          </p>
+        <div className="container footer-top">
+          <div className="footer-brand">
+            <a href="#home" className="footer-logo" aria-label="Octa home">
+              <img src={logImg} alt="Octa" className="footer-logo-img" />
+            </a>
+            <p className="footer-tagline">
+              Sophisticated technological expertise.
+              <br />
+              Don&apos;t be held back, stay competitive.
+            </p>
+          </div>
+
+          <div className="footer-col">
+            <h3 className="footer-heading">Products</h3>
+            <ul className="footer-list">
+              <li>
+                <span className="footer-dot footer-dot--it" aria-hidden="true" /> it
+              </li>
+              <li>
+                <span className="footer-dot footer-dot--web" aria-hidden="true" /> web development
+              </li>
+              <li>
+                <span className="footer-dot footer-dot--design" aria-hidden="true" /> design
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h3 className="footer-heading">Company</h3>
+            <ul className="footer-list footer-links">
+              <li>
+                <a href="#about">About Us</a>
+              </li>
+              <li>
+                <a href="#services">Services</a>
+              </li>
+              <li>
+                <a href="#contacts">Contacts</a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h3 className="footer-heading">Follow Us</h3>
+            <div className="footer-social">
+              <a
+                className="footer-social-btn"
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M15 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7H9v-7a6 6 0 0 1 6-6Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <rect x="2" y="9" width="4" height="12" stroke="currentColor" strokeWidth="2" />
+                  <circle cx="4" cy="4" r="2" fill="currentColor" />
+                </svg>
+              </a>
+              <a className="footer-social-btn" href="mailto:info@octamesh.co" aria-label="Email">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M4 4h16v16H4V4Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="m4 7 8 6 8-6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="container footer-bottom">
+          © {year} GFX Designs. All rights reserved.
         </div>
       </footer>
     </>

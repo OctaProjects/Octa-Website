@@ -5,7 +5,7 @@
   "type": "module",
   "author": "Rahma Sameh <rahma.sameh@octamesh.co> (https://www.linkedin.com/in/rahma-sameh/)",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",

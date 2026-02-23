@@ -3,6 +3,7 @@ import logImg from './assets/log-img.png';
 import aboutStoryImg from './assets/about-story.png';
 import meetOurTeamImg from './assets/meet-our-team.png';
 import PartnerPage from './PartnerPage.jsx';
+import DesignPage from './DesignPage.jsx';
 
 export default function App() {
   const normalizePage = (hash) => {
@@ -11,7 +12,7 @@ export default function App() {
     const pageKey = key.toLowerCase();
     if (!pageKey || pageKey === 'home') return 'home';
     if (pageKey === 'partner') return 'partner';
-    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk']);
+    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design']);
     return allowed.has(pageKey) ? pageKey : 'home';
   };
 
@@ -36,7 +37,7 @@ export default function App() {
       const nextPage = normalizePage(window.location.hash);
       setPage(nextPage);
       setShowPartner(nextPage === 'partner');
-      if (nextPage !== 'home' && nextPage !== 'partner') setActiveSection(nextPage);
+      if (nextPage !== 'home' && nextPage !== 'partner') setActiveSection(nextPage === 'creative-design' ? 'services' : nextPage);
     };
     onHash();
     window.addEventListener('hashchange', onHash);
@@ -53,8 +54,7 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    if (page === 'partner') return;
-    // When switching to a "page" view, jump to top for clarity.
+    // When switching page (including partner), scroll to top so content appears from the start.
     window.scrollTo({ top: 0, left: 0, behavior: page === 'home' ? 'auto' : 'smooth' });
   }, [page]);
 
@@ -93,12 +93,26 @@ export default function App() {
   }, [showPartner, page]);
 
   useEffect(() => {
-    // Arc stroke length variable
-    const arcPath = document.querySelector('.arc path');
-    if (arcPath && typeof arcPath.getTotalLength === 'function') {
-      const length = Math.ceil(arcPath.getTotalLength());
-      arcPath.style.setProperty('--arc-len', `${length}`);
-    }
+    if (page !== 'services' && page !== 'contacts') return;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.services-arc path, .contacts-arc path').forEach((path) => {
+          if (path?.getTotalLength) path.style.setProperty('--arc-len', `${Math.ceil(path.getTotalLength())}`);
+        });
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [page]);
+
+  useEffect(() => {
+    const setArcLengths = () => {
+      document.querySelectorAll('.arc path, .services-arc path, .contacts-arc path').forEach((path) => {
+        if (path && typeof path.getTotalLength === 'function') {
+          path.style.setProperty('--arc-len', `${Math.ceil(path.getTotalLength())}`);
+        }
+      });
+    };
+    setArcLengths();
 
     // Scroll-reveal animations
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -179,7 +193,7 @@ export default function App() {
             <nav className="nav">
               <a href="#home" className={activeSection === 'home' ? 'active' : ''}>Home</a>
               <a href="#about" className={activeSection === 'about' ? 'active' : ''}>About</a>
-              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' ? 'active' : ''}>Services</a>
+              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' || activeSection === 'creative-design' ? 'active' : ''}>Services</a>
               <a href="#contacts" className={activeSection === 'contacts' ? 'active' : ''}>Contacts</a>
               <a href="#faqs" className={activeSection === 'faqs' ? 'active' : ''}>FAQs</a>
             </nav>
@@ -220,6 +234,10 @@ export default function App() {
         <div className="page-transition">
           <PartnerPage onSubmitLead={onSubmitLead} />
         </div>
+      ) : page === 'creative-design' ? (
+        <div className="page-transition">
+          <DesignPage />
+        </div>
       ) : (
       <main id="home">
         {isHomePage && (
@@ -236,8 +254,8 @@ export default function App() {
                     </feMerge>
                   </filter>
                   <linearGradient id="arcG" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stopColor="#ccff33" />
-                    <stop offset="1" stopColor="#a3ff30" />
+                    <stop offset="0" stopColor="#a8ff2f" />
+                    <stop offset="1" stopColor="#8be626" />
                   </linearGradient>
                 </defs>
                 <path
@@ -432,8 +450,8 @@ export default function App() {
                       </feMerge>
                     </filter>
                     <linearGradient id="servicesArcG" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0" stopColor="#ccff33" />
-                      <stop offset="1" stopColor="#a3ff30" />
+                      <stop offset="0" stopColor="#a8ff2f" />
+                      <stop offset="1" stopColor="#8be626" />
                     </linearGradient>
                   </defs>
                   <path
@@ -481,7 +499,7 @@ export default function App() {
                 </ul>
               </a>
 
-              <article className="service-card">
+              <a href="#creative-design" className="service-card service-card-link">
                 <div className="service-card-icon service-card-icon--design" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="20" height="20">
                     <path
@@ -497,7 +515,7 @@ export default function App() {
                   <li><span className="service-bullet service-bullet--design" aria-hidden="true" />Graphic Illustration</li>
                   <li><span className="service-bullet service-bullet--design" aria-hidden="true" />Printing Services</li>
                 </ul>
-              </article>
+              </a>
 
               <article className="service-card">
                 <div className="service-card-icon service-card-icon--web" aria-hidden="true">
@@ -536,8 +554,8 @@ export default function App() {
                       </feMerge>
                     </filter>
                     <linearGradient id="contactsArcG" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0" stopColor="#ccff33" />
-                      <stop offset="1" stopColor="#a3ff30" />
+                      <stop offset="0" stopColor="#a8ff2f" />
+                      <stop offset="1" stopColor="#8be626" />
                     </linearGradient>
                   </defs>
                   <path

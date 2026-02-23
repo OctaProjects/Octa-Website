@@ -64,8 +64,8 @@ export default function PartnerPage({ onSubmitLead }) {
                   </feMerge>
                 </filter>
                 <linearGradient id="arcG-partner" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stopColor="#ccff33" />
-                  <stop offset="1" stopColor="#a3ff30" />
+                  <stop offset="0" stopColor="#a8ff2f" />
+                  <stop offset="1" stopColor="#8be626" />
                 </linearGradient>
               </defs>
               <path

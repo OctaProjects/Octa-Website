@@ -1123,15 +1123,31 @@ section[id] { scroll-margin-top: 80px; }
 }
 .design-hero-title {
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
   font-family: "Exo", system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0.4px;
   font-size: clamp(1.6rem, 3vw + 0.8rem, 2.6rem);
-  white-space: normal;
-  color: var(--text);
+  white-space: nowrap;
   animation: heroTitleIn 0.8s ease-out backwards;
 }
-.design-brackets { color: #fb7185; }
+.design-word { color: #fff; }
+.design-bracket {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #F43F5E;
+}
+.design-bracket svg {
+  width: 0.85em;
+  height: 0.85em;
+  display: block;
+}
+.design-bracket-left { margin-right: 0.05em; }
+.design-bracket-right { margin-left: 0.05em; }
 .design-hero-headline {
   margin: 0;
   font-family: "Exo", system-ui, sans-serif;
@@ -1199,7 +1215,7 @@ section[id] { scroll-margin-top: 80px; }
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--primary);
+  color: #F43F5E;
 }
 .design-catalog-title {
   margin: 0 0 24px;
@@ -1211,10 +1227,68 @@ section[id] { scroll-margin-top: 80px; }
 }
 .design-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(240px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 20px;
 }
-.design-card { cursor: default; }
+.design-card {
+  position: relative;
+  cursor: default;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+  overflow: hidden;
+}
+.design-card h3 {
+  margin: 0 0 12px;
+  font-family: "Exo", system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+.design-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.design-card-icon svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: block;
+}
+.design-card--ux .design-card-icon { background: #F43F5E; }
+.design-card--brand .design-card-icon { background: var(--primary); }
+.design-card--illus .design-card-icon { background: #60a5fa; }
+.design-card--print .design-card-icon { background: #a78bfa; }
+.design-card-desc {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(148, 163, 184, 0.95);
+}
+.design-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.design-card-tags span {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
 
 /* Design page CTA – gradient panel + pill button */
 .design-cta-panel {

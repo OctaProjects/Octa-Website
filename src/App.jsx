@@ -4,6 +4,7 @@ import aboutStoryImg from './assets/about-story.png';
 import meetOurTeamImg from './assets/meet-our-team.png';
 import PartnerPage from './PartnerPage.jsx';
 import DesignPage from './DesignPage.jsx';
+import WebDevelopmentPage from './WebDevelopmentPage.jsx';
 
 export default function App() {
   const normalizePage = (hash) => {
@@ -12,7 +13,7 @@ export default function App() {
     const pageKey = key.toLowerCase();
     if (!pageKey || pageKey === 'home') return 'home';
     if (pageKey === 'partner') return 'partner';
-    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design']);
+    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design', 'web-development']);
     return allowed.has(pageKey) ? pageKey : 'home';
   };
 
@@ -37,7 +38,7 @@ export default function App() {
       const nextPage = normalizePage(window.location.hash);
       setPage(nextPage);
       setShowPartner(nextPage === 'partner');
-      if (nextPage !== 'home' && nextPage !== 'partner') setActiveSection(nextPage === 'creative-design' ? 'services' : nextPage);
+      if (nextPage !== 'home' && nextPage !== 'partner') setActiveSection((nextPage === 'creative-design' || nextPage === 'web-development') ? 'services' : nextPage);
     };
     onHash();
     window.addEventListener('hashchange', onHash);
@@ -193,7 +194,7 @@ export default function App() {
             <nav className="nav">
               <a href="#home" className={activeSection === 'home' ? 'active' : ''}>Home</a>
               <a href="#about" className={activeSection === 'about' ? 'active' : ''}>About</a>
-              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' || activeSection === 'creative-design' ? 'active' : ''}>Services</a>
+              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' || activeSection === 'creative-design' || activeSection === 'web-development' ? 'active' : ''}>Services</a>
               <a href="#contacts" className={activeSection === 'contacts' ? 'active' : ''}>Contacts</a>
               <a href="#faqs" className={activeSection === 'faqs' ? 'active' : ''}>FAQs</a>
             </nav>
@@ -237,6 +238,10 @@ export default function App() {
       ) : page === 'creative-design' ? (
         <div className="page-transition">
           <DesignPage />
+        </div>
+      ) : page === 'web-development' ? (
+        <div className="page-transition">
+          <WebDevelopmentPage />
         </div>
       ) : (
       <main id="home">
@@ -517,7 +522,7 @@ export default function App() {
                 </ul>
               </a>
 
-              <article className="service-card">
+              <a href="#web-development" className="service-card service-card-link">
                 <div className="service-card-icon service-card-icon--web" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="20" height="20">
                     <path
@@ -533,7 +538,7 @@ export default function App() {
                   <li><span className="service-bullet service-bullet--web" aria-hidden="true" />API Integration</li>
                   <li><span className="service-bullet service-bullet--web" aria-hidden="true" />Performance Optimization</li>
                 </ul>
-              </article>
+              </a>
             </div>
           </div>
         </section>

@@ -138,11 +138,11 @@ export default function DesignPage() {
         <div className="container">
           <div className="cta-panel design-cta-panel">
             <span className="design-cta-star" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10L12 2Z" />
               </svg>
             </span>
-            <h2 className="cta-title">Ready to start your <span className="design-cta-accent">design journey</span>?</h2>
+            <h2 className="cta-title">Ready to start your<br /><span className="design-cta-accent">design journey</span>?</h2>
             <p className="cta-subtitle">
               Join 150+ global partners who have scaled their business with our creative expertise.
             </p>

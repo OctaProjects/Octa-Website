@@ -137,8 +137,7 @@ section[id] { scroll-margin-top: 80px; }
 .hero { padding: 72px 0 32px; position: relative; }
 .hero-inner { text-align: center; }
 .arc-wrap { position: relative; max-width: 900px; margin: 0 auto; opacity: 0.95; overflow: visible; animation: arcWrapFloat 4s ease-in-out infinite; }
-.arc-wrap:hover { animation-duration: 2.5s; }
-.arc { width: 100%; height: auto; overflow: visible; display: block; }
+.arc { width: 100%; height: auto; overflow: visible; display: block; pointer-events: none; }
 .hero-text-inside-arc { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 0 40px; text-align: center; pointer-events: none; overflow: visible; }
 .hero-text-inside-arc * { pointer-events: auto; }
 .hero { overflow: visible; }
@@ -732,12 +731,12 @@ section[id] { scroll-margin-top: 80px; }
   overflow: visible;
   animation: arcWrapFloat 4s ease-in-out infinite;
 }
-.services-arc-wrap:hover { animation-duration: 2.5s; }
 .services-arc{
   width: 100%;
   height: auto;
   overflow: visible;
   display: block;
+  pointer-events: none;
 }
 .services-hero-text{
   position: absolute;
@@ -1039,12 +1038,12 @@ section[id] { scroll-margin-top: 80px; }
   overflow: visible;
   animation: arcWrapFloat 4s ease-in-out infinite;
 }
-.contacts-arc-wrap:hover { animation-duration: 2.5s; }
 .contacts-arc{
   width: 100%;
   height: auto;
   overflow: visible;
   display: block;
+  pointer-events: none;
 }
 .contacts-hero-text{
   position: absolute;

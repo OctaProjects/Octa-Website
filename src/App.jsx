@@ -154,7 +154,6 @@ export default function App() {
     addReveal('.team-v2-panel--image', 'reveal-up', 0, 0);
     addReveal('.services-arc-wrap, .services-hero-title, .services-hero-sub', 'reveal-up', 0, 0);
     addReveal('.service-card', 'reveal-up', 90, 0);
-    addReveal('.cta-panel', 'reveal-up', 0, 0);
     addReveal('.about-media-card, .about-content, .about-points li', 'reveal-up', 70, 0);
     addReveal('.contacts-arc-wrap, .contacts-hero-title, .contacts-hero-sub', 'reveal-up', 0, 0);
     addReveal('.contact-form-card, .contact-card, .contact-map', 'reveal-up', 90, 0);
@@ -316,23 +315,6 @@ export default function App() {
                 alt="Meet our team"
                 loading="lazy"
               />
-            </div>
-          </div>
-        </section>
-        )}
-
-        {(isHomePage || page === 'team') && (
-        <section className="section cta-callout" aria-label="Start a conversation">
-          <div className="container">
-            <div className="cta-panel">
-              <h2 className="cta-title">Ready to Redefine Your Project?</h2>
-              <p className="cta-subtitle">
-                Harness the power of Egypt&apos;s finest freelancers. From specialized design to complex technical
-                architecture, Always You Can with OCTA.
-              </p>
-              <a className="cta-button" href="#contacts">
-                Start a Conversation
-              </a>
             </div>
           </div>
         </section>

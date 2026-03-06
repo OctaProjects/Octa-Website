@@ -615,7 +615,7 @@ section[id] { scroll-margin-top: 80px; }
 }
 .about-story-grid{
   display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
+  grid-template-columns: 1.05fr 0.95fr;
   gap: 28px;
   align-items: start;
 }

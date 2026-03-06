@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import logImg from './assets/log-img.png';
-import aboutStoryImg from './assets/about-story.png';
+import aboutNotepadImg from './assets/about-notepad.png';
 import meetOurTeamImg from './assets/meet-our-team.png';
 import PartnerPage from './PartnerPage.jsx';
 import DesignPage from './DesignPage.jsx';
@@ -155,7 +155,7 @@ export default function App() {
     addReveal('.services-arc-wrap, .services-hero-title, .services-hero-sub', 'reveal-up', 0, 0);
     addReveal('.service-card', 'reveal-up', 90, 0);
     addReveal('.cta-panel', 'reveal-up', 0, 0);
-    addReveal('.about-media-card, .about-content, .about-stats .stat-card, .about-points li, .vision-card', 'reveal-up', 70, 0);
+    addReveal('.about-media-card, .about-content, .about-points li', 'reveal-up', 70, 0);
     addReveal('.contacts-arc-wrap, .contacts-hero-title, .contacts-hero-sub', 'reveal-up', 0, 0);
     addReveal('.contact-form-card, .contact-card, .contact-map', 'reveal-up', 90, 0);
     addReveal('.social-row .social-icon', 'reveal-up', 60, 0);
@@ -345,94 +345,29 @@ export default function App() {
               <span className="bullet"></span>About
             </h2>
             <div className="about-story-grid">
-              <div className="about-media" aria-hidden="true">
-                <div className="about-media-card">
-                  <div className="about-media-img" style={{ '--about-img': `url(${aboutStoryImg})` }} />
-                  <div className="about-media-caption">The birth of a unified force.</div>
-                </div>
-              </div>
-
               <div className="about-content">
-                <p className="about-kicker">OUR STORY</p>
-                <h3 className="about-heading">
-                  From Specialists to a <span className="accent">Unified Force.</span>
-                </h3>
                 <p className="about-lead">
-                  We unify specialists across IT, cloud, and design to deliver consistent outcomes—fast execution,
-                  reliable support, and measurable impact.
+                  Welcome to our IT service company! We are a team of experienced professionals dedicated to providing top-quality IT support to small and mid-level businesses. Our team has a wide range of expertise, including network infrastructure, cloud services, network management, and light current. We are committed to staying up-to-date on the latest technologies and best practices, so that we can provide our clients with the most effective solutions for their needs.
                 </p>
-                <ul className="about-points">
-                  <li>Consistent delivery with a single accountable team.</li>
-                  <li>Clear communication, timelines, and transparent reporting.</li>
-                  <li>Security-first mindset across every engagement.</li>
-                </ul>
-
-                <div className="about-stats">
-                  <div className="stat-card">
-                    <div className="stat-number">5+</div>
-                    <div className="stat-label">FREELANCERS</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-number">12+</div>
-                    <div className="stat-label">PROJECTS DONE</div>
-                  </div>
-                </div>
+                <ol className="about-points about-points--numbered">
+                  <li>Network design and deployment.</li>
+                  <li>Cloud migration and management.</li>
+                  <li>Security solutions.</li>
+                  <li>Sound and VOIP solution.</li>
+                  <li>IT support and maintenance.</li>
+                  <li>Printing solutions.</li>
+                </ol>
+                <p className="about-lead">
+                  We are passionate about helping our clients succeed and thrive in today&apos;s digital world. If you have any IT needs, don&apos;t hesitate to get in touch with us. We would be happy to discuss how we can support your business.
+                </p>
+                <a href="#about" className="btn btn-about-story">
+                  Learn our story
+                </a>
               </div>
-            </div>
 
-            <div className="about-vision">
-              <p className="about-kicker about-kicker-center">OUR VISION</p>
-              <h3 className="about-heading about-heading-center">
-                <span className="vision-highlight">Empowering the</span>{' '}
-                <span className="vision-title">Next Wave.</span>
-              </h3>
-              <div className="vision-grid">
-                <div className="vision-card">
-                  <div className="vision-icon badge-it" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                      <path
-                        fill="currentColor"
-                        d="M14.8 3.6c.5.1.8.6.7 1.1l-.4 1.7 3.2 3.2 1.7-.4c.5-.1 1 .2 1.1.7l.6 2.8c.1.4-.1.9-.5 1.1l-1.6.8a4 4 0 0 1-1.6 4.6l-1 .6-3.5-3.5-3.5-3.5.6-1A4 4 0 0 1 10 4.6l.8-1.6c.2-.4.7-.6 1.1-.5l2.9.6ZM8.8 12.2l3 3-3.6 4.8c-.2.3-.5.5-.9.5H4.5c-.6 0-1-.4-1-1v-2.8c0-.4.2-.7.5-.9l4.8-3.6Z"
-                      />
-                    </svg>
-                  </div>
-                  <h4>Global Integration</h4>
-                  <p>
-                    To bridge the gap between world-class Egyptian talent and global tech demands, ensuring our youth lead
-                    the digital frontier.
-                  </p>
-                </div>
-
-                <div className="vision-card">
-                  <div className="vision-icon badge-console" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                      <path
-                        fill="currentColor"
-                        d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7A2.5 2.5 0 0 1 17.5 16h-4.2l.7 2H16a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h1.9l.7-2H6.5A2.5 2.5 0 0 1 4 13.5v-7Zm2.5-.5a.5.5 0 0 0-.5.5v7c0 .3.2.5.5.5h11a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5h-11Z"
-                      />
-                    </svg>
-                  </div>
-                  <h4>Technical Mastery</h4>
-                  <p>
-                    Continuous growth and specialization in emerging technologies like AI, Blockchain, and advanced Web
-                    Architectures.
-                  </p>
-                </div>
-
-                <div className="vision-card">
-                  <div className="vision-icon badge-design" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                      <path
-                        fill="currentColor"
-                        d="M16 11a4 4 0 0 1 4 4v4a1 1 0 1 1-2 0v-4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v4a1 1 0 1 1-2 0v-4a4 4 0 0 1 4-4h8Zm-4-8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
-                      />
-                    </svg>
-                  </div>
-                  <h4>Community Spirit</h4>
-                  <p>
-                    Building a sustainable ecosystem for Egyptian freelancers to thrive, collaborate, and compete on the
-                    highest level.
-                  </p>
+              <div className="about-media" aria-hidden="true">
+                <div className="about-media-card about-media-card--notepad">
+                  <div className="about-media-img" style={{ '--about-img': `url(${aboutNotepadImg})` }} />
                 </div>
               </div>
             </div>

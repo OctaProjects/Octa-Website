@@ -579,6 +579,40 @@ section[id] { scroll-margin-top: 80px; }
   gap: 8px;
 }
 
+.about-points--numbered{
+  list-style: decimal;
+  padding-left: 24px;
+  margin-bottom: 20px;
+}
+.about-points + .about-lead{
+  margin-top: 20px;
+  margin-bottom: 12px;
+}
+.btn-about-story{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  padding: 12px 24px;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  color: var(--text);
+  background: transparent;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 200ms ease, color 200ms ease, box-shadow 200ms ease;
+}
+.btn-about-story:hover{
+  background: var(--primary);
+  color: var(--accent-contrast);
+  box-shadow: 0 0 20px rgba(168,255,47,0.3);
+}
+.about-media-card--notepad .about-media-img{
+  background-image: var(--about-img);
+  filter: none;
+  aspect-ratio: 1;
+  background-size: contain;
+}
 .about-story-grid{
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;

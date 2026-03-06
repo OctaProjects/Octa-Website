@@ -1,5 +1,21 @@
 import { useEffect } from 'react';
 
+// Our Tech Stack section – edit content here
+const TECH_STACK = {
+  title: 'Our Tech Stack',
+  description: 'We leverage industry-leading technologies to build resilient applications that stand the test of time.',
+  items: ['Node.js', 'Next.js', 'PostgreSQL', 'AWS / Vercel', 'Docker'],
+  codeSnippet: {
+    variable: 'project',
+    properties: [
+      { key: 'status', value: 'optimized' },
+      { key: 'scalability', value: 'unlimited' },
+      { key: 'delivery', value: 'on-time' },
+    ],
+    comment: 'Deploying to production...',
+  },
+};
+
 export default function WebDevelopmentPage() {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -149,25 +165,27 @@ export default function WebDevelopmentPage() {
       <section className="web-tech-stack" aria-labelledby="tech-stack-heading">
         <div className="web-tech-stack-inner">
           <div className="web-tech-stack-content">
-            <h2 id="tech-stack-heading" className="web-tech-stack-title">Our Tech Stack</h2>
-            <p className="web-tech-stack-desc">
-              We leverage industry-leading technologies to build resilient applications that stand the test of time.
-            </p>
+            <h2 id="tech-stack-heading" className="web-tech-stack-title">{TECH_STACK.title}</h2>
+            <p className="web-tech-stack-desc">{TECH_STACK.description}</p>
             <ul className="web-tech-stack-list">
-              <li>Node.js</li>
-              <li>Next.js</li>
-              <li>PostgreSQL</li>
-              <li>AWS / Vercel</li>
-              <li>Docker</li>
+              {TECH_STACK.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
           <div className="web-tech-stack-code" aria-hidden="true">
-            <pre><code><span className="web-code-keyword">const</span> project = {'{'}<br />
-  <span className="web-code-key">status</span>: <span className="web-code-string">'optimized'</span>,<br />
-  <span className="web-code-key">scalability</span>: <span className="web-code-string">'unlimited'</span>,<br />
-  <span className="web-code-key">delivery</span>: <span className="web-code-string">'on-time'</span><br />
-{'}'};<br />
-<span className="web-code-comment">// Deploying to production...</span></code></pre>
+            <pre>
+              <code>
+                <span className="web-code-keyword">const</span> {TECH_STACK.codeSnippet.variable} = {'{'}<br />
+                {TECH_STACK.codeSnippet.properties.map(({ key, value }, i) => (
+                  <span key={key}>
+                    {'  '}<span className="web-code-key">{key}</span>: <span className="web-code-string">'{value}'</span>{i < TECH_STACK.codeSnippet.properties.length - 1 ? ',' : ''}<br />
+                  </span>
+                ))}
+                {'}'};<br />
+                <span className="web-code-comment">// {TECH_STACK.codeSnippet.comment}</span>
+              </code>
+            </pre>
           </div>
         </div>
       </section>

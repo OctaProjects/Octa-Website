@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import logImg from './assets/log-img.png';
-import aboutNotepadImg from './assets/about-notepad.png';
 import meetOurTeamImg from './assets/meet-our-team.png';
 import PartnerPage from './PartnerPage.jsx';
 import DesignPage from './DesignPage.jsx';
 import WebDevelopmentPage from './WebDevelopmentPage.jsx';
+import AboutPage from './AboutPage.jsx';
 
 export default function App() {
   const normalizePage = (hash) => {
@@ -154,14 +154,16 @@ export default function App() {
     addReveal('.team-v2-panel--image', 'reveal-up', 0, 0);
     addReveal('.services-arc-wrap, .services-hero-title, .services-hero-sub', 'reveal-up', 0, 0);
     addReveal('.service-card', 'reveal-up', 90, 0);
-    addReveal('.about-media-card, .about-content, .about-points li', 'reveal-up', 70, 0);
+    addReveal('.about-media-card, .about-content, .about-points li, .about-stats--unified .stat-card', 'reveal-up', 70, 0);
+    addReveal('.about-page .vision-card, .about-page .team-v2-card', 'reveal-up', 90, 0);
+    addReveal('.about-page .cta-panel', 'reveal-up', 0, 0);
     addReveal('.contacts-arc-wrap, .contacts-hero-title, .contacts-hero-sub', 'reveal-up', 0, 0);
     addReveal('.contact-form-card, .contact-card, .contact-map', 'reveal-up', 90, 0);
     addReveal('.social-row .social-icon', 'reveal-up', 60, 0);
     addReveal('.faq-item', 'reveal-up', 90, 0);
 
     return () => revealObserver?.disconnect();
-  }, []);
+  }, [page]);
 
   // Force dark theme by default; no light theme behavior
 
@@ -233,6 +235,10 @@ export default function App() {
       {showPartner ? (
         <div className="page-transition">
           <PartnerPage onSubmitLead={onSubmitLead} />
+        </div>
+      ) : page === 'about' ? (
+        <div className="page-transition">
+          <AboutPage />
         </div>
       ) : page === 'creative-design' ? (
         <div className="page-transition">
@@ -322,38 +328,7 @@ export default function App() {
 
         {shouldShow('about') && (
         <section id="about" className="section about">
-          <div className="container">
-            <h2 className="section-title">
-              <span className="bullet"></span>About
-            </h2>
-            <div className="about-story-grid">
-              <div className="about-content">
-                <p className="about-lead">
-                  Welcome to our IT service company! We are a team of experienced professionals dedicated to providing top-quality IT support to small and mid-level businesses. Our team has a wide range of expertise, including network infrastructure, cloud services, network management, and light current. We are committed to staying up-to-date on the latest technologies and best practices, so that we can provide our clients with the most effective solutions for their needs.
-                </p>
-                <ol className="about-points about-points--numbered">
-                  <li>Network design and deployment.</li>
-                  <li>Cloud migration and management.</li>
-                  <li>Security solutions.</li>
-                  <li>Sound and VOIP solution.</li>
-                  <li>IT support and maintenance.</li>
-                  <li>Printing solutions.</li>
-                </ol>
-                <p className="about-lead">
-                  We are passionate about helping our clients succeed and thrive in today&apos;s digital world. If you have any IT needs, don&apos;t hesitate to get in touch with us. We would be happy to discuss how we can support your business.
-                </p>
-                <a href="#about" className="btn btn-about-story">
-                  Learn our story
-                </a>
-              </div>
-
-              <div className="about-media" aria-hidden="true">
-                <div className="about-media-card about-media-card--notepad">
-                  <div className="about-media-img" style={{ '--about-img': `url(${aboutNotepadImg})` }} />
-                </div>
-              </div>
-            </div>
-          </div>
+          <AboutPage />
         </section>
         )}
 

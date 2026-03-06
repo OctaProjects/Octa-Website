@@ -1545,7 +1545,7 @@ section[id] { scroll-margin-top: 80px; }
   color: rgba(255, 255, 255, 0.78);
 }
 @media (max-width: 900px) {
-  .design-cta-panel { padding: 60px 40px 56px; min-height: auto; }
+  .design-cta-panel { padding: 60px 40px 56px; min-height: 0; }
 }
 @media (max-width: 600px) {
   .design-cta-panel { padding: 48px 24px 44px; border-radius: 32px; }
@@ -1751,7 +1751,7 @@ section[id] { scroll-margin-top: 80px; }
   .web-hero { min-height: 500px; padding: 56px 20px 40px; }
   .web-hero-text { padding: 0 20px; }
   .web-catalog-grid { grid-template-columns: 1fr; }
-  .web-catalog { padding: 40px 20px 48px; min-height: auto; }
+  .web-catalog { padding: 40px 20px 48px; min-height: 0; }
   .web-catalog-card { border-radius: 24px; padding: 32px; }
   .web-catalog-card-bg-icon { width: 80px; height: 80px; top: 16px; right: 16px; }
 }

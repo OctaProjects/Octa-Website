@@ -45,10 +45,6 @@ export default function AboutPage() {
       {/* Our Story – team photo left, Unified Force */}
       <section className="section about about-story-unified">
         <div className="container">
-          <p className="about-kicker">OUR STORY</p>
-          <h2 className="about-heading">
-            From Specialists to a <span className="vision-title">Unified Force.</span>
-          </h2>
           <div className="about-story-grid about-story-grid--media-left">
             <div className="about-media" aria-hidden="true">
               <div className="about-media-card about-media-card--team about-media-card--caption-overlay">
@@ -57,6 +53,10 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="about-content">
+              <p className="about-kicker">OUR STORY</p>
+              <h2 className="about-heading">
+                From Specialists to a <span className="vision-title">Unified Force.</span>
+              </h2>
               <p className="about-lead">
                 Born from the ambition of Egypt&apos;s brightest young minds, OCTA transitioned from a group of individual specialists into a powerhouse collective.
               </p>

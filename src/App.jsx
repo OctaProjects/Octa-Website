@@ -23,6 +23,7 @@ export default function App() {
   const [page, setPage] = useState(() => normalizePage(window.location.hash));
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     try {
       const saved = window.localStorage.getItem('octa_theme');
@@ -57,6 +58,10 @@ export default function App() {
   useEffect(() => {
     // When switching page (including partner), scroll to top so content appears from the start.
     window.scrollTo({ top: 0, left: 0, behavior: page === 'home' ? 'auto' : 'smooth' });
+  }, [page]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
   }, [page]);
 
   useEffect(() => {
@@ -192,15 +197,26 @@ export default function App() {
             <img src={logImg} alt="Octa" className="brand-logo-img" />
           </a>
           <div className="header-actions">
-            <nav className="nav">
-              <a href="#home" className={activeSection === 'home' ? 'active' : ''}>Home</a>
-              <a href="#about" className={activeSection === 'about' ? 'active' : ''}>About</a>
-              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' || activeSection === 'creative-design' || activeSection === 'web-development' ? 'active' : ''}>Services</a>
-              <a href="#contacts" className={activeSection === 'contacts' ? 'active' : ''}>Contacts</a>
-              <a href="#faqs" className={activeSection === 'faqs' ? 'active' : ''}>FAQs</a>
+            <nav className={`nav ${mobileMenuOpen ? 'nav-open' : ''}`}>
+              <a href="#home" className={activeSection === 'home' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Home</a>
+              <a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>About</a>
+              <a href="#services" className={activeSection === 'services' || activeSection === 'it-helpdesk' || activeSection === 'creative-design' || activeSection === 'web-development' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Services</a>
+              <a href="#contacts" className={activeSection === 'contacts' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Contacts</a>
+              <a href="#faqs" className={activeSection === 'faqs' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>FAQs</a>
             </nav>
           </div>
           <div className="header-right">
+            <button
+              type="button"
+              className="nav-toggle"
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+            >
+              <span className="nav-toggle-bar" />
+              <span className="nav-toggle-bar" />
+              <span className="nav-toggle-bar" />
+            </button>
             <button
               type="button"
               className="theme-toggle"

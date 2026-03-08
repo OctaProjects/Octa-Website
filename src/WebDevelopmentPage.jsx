@@ -1,13 +1,10 @@
 /**
  * WebDevelopmentPage – Web Dev Services
- * صفحة تطوير الويب
- *
- * English: Hero, catalog (Apps, E‑commerce, API, Performance), and tech stack section.
- * العربية: البطل، كتالوج الخدمات، وقسم التقنيات المستخدمة.
+ * Hero, catalog (Apps, E‑commerce, API, Performance), and tech stack section.
  */
 import { useEffect } from 'react';
 
-// Tech stack content – edit here / محتوى التقنيات – عدّل هنا
+// Tech stack content – edit here
 const TECH_STACK = {
   title: 'Our Tech Stack',
   description: 'We leverage industry-leading technologies to build resilient applications that stand the test of time.',

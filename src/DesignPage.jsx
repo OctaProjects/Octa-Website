@@ -1,14 +1,10 @@
 /**
  * DesignPage – Creative Design Services
- * صفحة التصميم الإبداعي
- *
- * English: Shows design hero, service catalog (UX, Brand, Illustration, Print), and CTA.
- * العربية: تعرض البطل، كتالوج الخدمات، وزر الحث على الإجراء.
+ * Shows design hero, service catalog (UX, Brand, Illustration, Print), and CTA.
  */
 import { useEffect } from 'react';
 
 export default function DesignPage() {
-  // Scroll-reveal for catalog & CTA / ظهور العناصر عند التمرير
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;

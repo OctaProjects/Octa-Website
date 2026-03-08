@@ -1,7 +1,5 @@
 /* ==========================================================================
-   Brand Colors / ألوان العلامة
-   English: Use these variables everywhere for consistency
-   العربية: استخدم هذه المتغيرات في كل مكان للاتساق
+   Brand Colors - use these variables everywhere for consistency
    ========================================================================== */
 :root {
   --bg: #0c1117;
@@ -18,7 +16,7 @@
   --accent-glow: color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-/* Light mode / الوضع الفاتح */
+/* Light mode */
 :root[data-theme='light'] {
   --bg: #f7f9fc;
   --bg-2: #ffffff;
@@ -58,8 +56,7 @@ section[id] { scroll-margin-top: 80px; }
 
 
 /* ==========================================================================
-   Header / الهيدر
-   Scroll progress bar / شريط تقدم التمرير
+   Header - scroll progress bar
    ========================================================================== */
 .scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: rgba(255,255,255,0.06); overflow: hidden; }
 :root[data-theme='light'] .scroll-progress { background: rgba(12,17,23,0.10); }
@@ -161,7 +158,7 @@ section[id] { scroll-margin-top: 80px; }
 :root[data-theme='light'] .cta-partner { background: #CEF589; color: #0c1117; border: none; outline: none; }
 :root[data-theme='light'] .cta-partner:hover { background: #c5eb7a; filter: none; outline: none; }
 
-/* Mobile nav overlay (< 880px) / قائمة الهاتف (أقل من 880px) */
+/* Mobile nav overlay (< 880px) */
 @media (max-width: 879px) {
   .nav {
     position: fixed;
@@ -223,7 +220,7 @@ section[id] { scroll-margin-top: 80px; }
 /* (Accent switcher removed) */
 
 /* ==========================================================================
-   Hero / القسم الرئيسي
+   Hero
    ========================================================================== */
 .hero { padding: 72px 0 32px; position: relative; }
 .hero-inner { text-align: center; }
@@ -414,7 +411,7 @@ section[id] { scroll-margin-top: 80px; }
 .btn-submit { margin: 6px auto 2px; color: var(--accent-contrast); border-radius: 10px; }
 
 /* ==========================================================================
-   Sections / الأقسام
+   Sections
    ========================================================================== */
 .section { padding: 52px 0; }
 .section-title { margin: 0 0 16px; font-family: "Exo", system-ui, sans-serif; font-size: clamp(1.25rem, 1.1vw + 1rem, 1.8rem); display: flex; align-items: center; gap: 10px; }
@@ -710,7 +707,7 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 /* ==========================================================================
-   About / من نحن
+   About
    ========================================================================== */
 .about p { color: var(--muted); max-width: none; }
 .accent { color: var(--primary); }
@@ -1004,7 +1001,7 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 /* ==========================================================================
-   Services / الخدمات (نفس نمط القوس في الصفحة الرئيسية)
+   Services - same arc style as home hero
    ========================================================================== */
 .services-hero{
   padding: 72px 0 32px;
@@ -1319,7 +1316,7 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 /* ==========================================================================
-   Contacts / اتصل بنا (نفس نمط القوس)
+   Contacts - same arc style as home hero
    ========================================================================== */
 .contacts-hero{
   padding: 72px 0 32px;
@@ -2135,7 +2132,7 @@ section[id] { scroll-margin-top: 80px; }
 .social-icon:active { transform: scale(0.95); }
 
 /* ==========================================================================
-   Footer / الفوتر
+   Footer
    ========================================================================== */
 .site-footer{
   border-top: 1px solid var(--border);
@@ -2236,7 +2233,7 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 /* ==========================================================================
-   Responsive / الاستجابة
+   Responsive
    ========================================================================== */
 @media (max-width: 420px) {
   .hero-text-inside-arc,
@@ -2284,10 +2281,10 @@ section[id] { scroll-margin-top: 80px; }
 }
 
 /* ==========================================================================
-   Animations: utilities and keyframes / الحركات والعناصر المساعدة
+   Animations: utilities and keyframes
    ========================================================================== */
 
-/* Reveal base / أساس الظهور */
+/* Reveal base */
 .will-reveal { opacity: 0; will-change: transform, opacity; transition: transform 700ms cubic-bezier(.21,.61,.35,1), opacity 700ms cubic-bezier(.21,.61,.35,1); transition-delay: var(--reveal-delay, 0ms); }
 .will-reveal.is-visible { opacity: 1; transform: none; }
 .will-reveal.reveal-up { transform: translateY(16px); }

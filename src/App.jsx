@@ -1,9 +1,6 @@
 /**
  * App.jsx – Main Application
- * التطبيق الرئيسي
- *
- * English: Handles hash routing, theme, scroll progress, section highlighting, and page rendering.
- * العربية: يتولى التوجيه عبر الـ hash والثيم وشريط التقدم وتمييز الأقسام وعرض الصفحات.
+ * Handles hash routing, theme, scroll progress, section highlighting, and page rendering.
  */
 import { useEffect, useMemo, useState } from 'react';
 import logImg from './assets/log-img.png';
@@ -14,7 +11,6 @@ import WebDevelopmentPage from './WebDevelopmentPage.jsx';
 import AboutPage from './AboutPage.jsx';
 
 export default function App() {
-  // Converts URL hash to valid page key / يحول الـ hash في الرابط إلى مفتاح صفحة صالح
   const normalizePage = (hash) => {
     const h = String(hash || '').trim();
     const key = h.startsWith('#') ? h.slice(1) : h;
@@ -26,19 +22,12 @@ export default function App() {
   };
 
   const year = useMemo(() => new Date().getFullYear(), []);
-  // State: scroll past header? / هل تم التمرير بعد الهيدر؟
   const [isScrolled, setIsScrolled] = useState(false);
-  // State: show Partner page? / هل تعرض صفحة الشريك؟
   const [showPartner, setShowPartner] = useState(false);
-  // State: current page from hash / الصفحة الحالية من الرابط
   const [page, setPage] = useState(() => normalizePage(window.location.hash));
-  // State: scroll progress 0–100% / نسبة التمرير 0–100%
   const [scrollProgress, setScrollProgress] = useState(0);
-  // State: which section is in view (for nav highlight) / أي قسم ظاهر (لتمييز الرابط)
   const [activeSection, setActiveSection] = useState('home');
-  // State: mobile menu open? / هل قائمة الهاتف مفتوحة؟
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // State: theme from localStorage / الثيم من التخزين المحلي
   const [theme, setTheme] = useState(() => {
     try {
       const saved = window.localStorage.getItem('octa_theme');
@@ -49,8 +38,6 @@ export default function App() {
     return 'dark';
   });
 
-  // Effect: Listen to hash change, update page & partner visibility
-  // التأثير: الاستماع لتغيير الرابط وتحديث الصفحة وظهور صفحة الشريك
   useEffect(() => {
     const onHash = () => {
       const nextPage = normalizePage(window.location.hash);
@@ -63,7 +50,6 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  // Effect: Apply theme to <html>, save to localStorage / تطبيق الثيم وحفظه
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     try {
@@ -73,17 +59,14 @@ export default function App() {
     }
   }, [theme]);
 
-  // Effect: Scroll to top on page change / التمرير للأعلى عند تغيير الصفحة
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: page === 'home' ? 'auto' : 'smooth' });
   }, [page]);
 
-  // Effect: Close mobile menu on page change / إغلاق قائمة الهاتف عند تغيير الصفحة
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [page]);
 
-  // Effect: Track scroll for progress bar & header state / تتبع التمرير لشريط التقدم
   useEffect(() => {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 8);
@@ -95,8 +78,6 @@ export default function App() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [showPartner, page]);
 
-  // Effect: IntersectionObserver – highlight nav for visible section
-  // التأثير: تمييز رابط القسم الظاهر على الشاشة
   useEffect(() => {
     if (showPartner || page !== 'home') return;
     const sections = [
@@ -120,8 +101,6 @@ export default function App() {
     return () => observer.disconnect();
   }, [showPartner, page]);
 
-  // Effect: Set SVG arc path length for animation (services & contacts)
-  // التأثير: تحديد طول مسار القوس لحركة الرسم
   useEffect(() => {
     if (page !== 'services' && page !== 'contacts') return;
     const id = requestAnimationFrame(() => {
@@ -134,8 +113,6 @@ export default function App() {
     return () => cancelAnimationFrame(id);
   }, [page]);
 
-  // Effect: Arc lengths + scroll-reveal animations via IntersectionObserver
-  // التأثير: أطوال الأقواس وحركات الظهور عند التمرير
   useEffect(() => {
     const setArcLengths = () => {
       document.querySelectorAll('.arc path, .services-arc path, .contacts-arc path').forEach((path) => {

@@ -1,9 +1,6 @@
 /**
  * PartnerPage – Partner Sign-up
- * صفحة التسجيل كشريك
- *
- * English: Partner registration form inside arc. Shows thank-you state after submit.
- * العربية: نموذج التسجيل كشريك داخل القوس. يعرض رسالة الشكر بعد الإرسال.
+ * Partner registration form inside arc. Shows thank-you state after submit.
  */
 import { useEffect, useState } from 'react';
 
@@ -25,7 +22,7 @@ export default function PartnerPage({ onSubmitLead }) {
     e.preventDefault();
     const form = e.currentTarget;
 
-    // Validate: empty = invalid, consent required / التحقق: الحقول الفارغة وموافقة المستخدم مطلوبة
+    // Validate: empty = invalid, consent required
     const fields = ['name', 'company', 'email', 'phone', 'field'];
     fields.forEach((n) => {
       const el = form.elements.namedItem(n);

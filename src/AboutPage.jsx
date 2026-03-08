@@ -1,9 +1,6 @@
 /**
  * AboutPage – About Us & Team
- * صفحة من نحن والفريق
- *
- * English: Company story, vision cards, team grid, and CTA.
- * العربية: قصة الشركة، بطاقات الرؤية، شبكة الفريق، وزر الحث على الإجراء.
+ * Company story, vision cards, team grid, and CTA.
  */
 import aboutNotepadImg from './assets/about-notepad.png';
 import aboutStoryImg from './assets/about-story.png';
@@ -14,7 +11,7 @@ import rahmaImg from './assets/team/rahma.png';
 export default function AboutPage() {
   return (
     <div id="about" className="about-page">
-      {/* Our Story: text left, notepad right / قصتنا: النص يسار، الدفتر يمين */}
+      {/* Our Story: text left, notepad right */}
       <section className="section about about-page-story">
         <div className="container">
           <h2 className="section-title">

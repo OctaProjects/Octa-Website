@@ -331,7 +331,7 @@ export default function App() {
         )}
 
         {shouldShow('team') && (
-        <section className="section team-v2 team-v2-image" id="team">
+        <section className="section team-v2 team-v2-image team-section-disabled" id="team">
           <div className="container">
             <div className="team-v2-panel team-v2-panel--image" aria-label="Meet our team">
               <img

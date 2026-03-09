@@ -122,7 +122,7 @@ export default function AboutPage() {
       </section>
 
       {/* Meet Our Team */}
-      <section className="section team-v2" id="team" aria-label="Meet our team">
+      <section className="section team-v2 team-section-disabled" id="team" aria-label="Meet our team">
         <div className="container">
           <h2 className="section-title team-v2-title">
             <span className="bullet"></span>MEET OUR TEAM

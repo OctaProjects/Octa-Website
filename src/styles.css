@@ -502,9 +502,7 @@ section[id] { scroll-margin-top: 80px; }
 .cta-subtitle{
   margin: 14px auto 0;
   max-width: 860px;
-  color: rgba(11,22,8,0.72);
-  font-size: 0.95rem;
-  line-height: 1.7;
+  color: rgba(0, 0, 0, 0.756)
 }
 .cta-button{
   margin: 22px auto 0;

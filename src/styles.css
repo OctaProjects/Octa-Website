@@ -501,8 +501,22 @@ section[id] { scroll-margin-top: 80px; }
 }
 .cta-subtitle{
   margin: 14px auto 0;
-  max-width: 860px;
-  color: rgba(0, 0, 0, 0.756)
+  width: 672px;
+  max-width: 100%;
+  min-height: 59px;
+  opacity: 1;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 29.25px;
+  letter-spacing: 0;
+  text-align: center;
+  vertical-align: middle;
+  color: #72816A;
+}
+.cta-panel .cta-subtitle {
+  color: #72816A;
 }
 .cta-button{
   margin: 22px auto 0;

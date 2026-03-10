@@ -417,34 +417,53 @@ section[id] { scroll-margin-top: 80px; }
 .section-title { margin: 0 0 16px; font-family: "Exo", system-ui, sans-serif; font-size: clamp(1.25rem, 1.1vw + 1rem, 1.8rem); display: flex; align-items: center; gap: 10px; }
 .bullet { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 12px rgba(168,255,47,0.8); display: inline-block; animation: glowPulse 3s ease-in-out infinite, bulletPop 0.5s ease-out backwards; }
 
-/* Products - 3 buttons always in one row */
+/* Products section – layout from design specs (width 1280, padding 96/24, gap 48) */
+.section.products { padding: 0; }
+.section.products .container {
+  max-width: 1280px;
+  width: 100%;
+  padding: 96px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  min-height: 344px;
+  box-sizing: border-box;
+}
+
+/* Products - 3 buttons always in one line (no wrap) */
 .product-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
   gap: 14px;
   justify-content: center;
-  justify-items: center;
   align-items: center;
-  padding-top: 10px;
-  max-width: 560px;
+  padding-top: 0;
+  width: 100%;
   margin: 0 auto;
 }
+.product-row .badge { flex: 1 1 0; min-width: 0; max-width: none; }
 @media (max-width: 480px) {
-  .product-row { gap: 8px; max-width: 100%; padding-left: 12px; padding-right: 12px; }
-  .product-row .badge { padding: 10px 12px; font-size: 0.9rem; max-width: none; min-width: 0; }
+  .product-row { gap: 8px; padding-left: 0; padding-right: 0; }
+  .product-row .badge { padding: 10px 12px; font-size: 0.75rem; max-width: none; }
 }
 .badge { --bg-badge: rgba(255,255,255,0.04); position: relative; display: inline-flex; align-items: center; justify-content: center; font-family: "Exo", system-ui, sans-serif; text-transform: lowercase; gap: 8px; color: var(--text); border: 1px solid var(--border); padding: 14px 18px; border-radius: 16px; width: 100%; max-width: 160px; background: linear-gradient(180deg, var(--panel), var(--bg-2)); box-shadow: 0 10px 24px rgba(0,0,0,0.25); overflow: visible; }
 .badge:hover { box-shadow: 0 14px 28px rgba(0,0,0,0.28); border-color: #334057; }
 .badge:before { content: ""; width: 14px; height: 14px; border-radius: 4px; }
 .badge-it { animation: none !important; transition: none !important; }
-/* IT badge: no animation but same initial position as other badges so they align */
-.badge-it.will-reveal { opacity: 1 !important; transform: translateY(16px) !important; transition: none !important; }
-.badge-it.will-reveal.is-visible { transform: none !important; }
 .badge-it * { animation: none !important; transition: none !important; }
 .badge-it:before { background: #a8ff2f; box-shadow: 0 0 8px rgba(168,255,47,0.45); }
+/* Disable scroll-reveal animation for ALL product badges so they align the same */
+.product-row .badge.will-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 /* IT button: no hover effect - keep same appearance */
-.badge-it:hover { background: linear-gradient(180deg, var(--panel), var(--bg-2)); color: var(--text); border-color: var(--border); box-shadow: 0 10px 24px rgba(0,0,0,0.25); }
+.badge-it:hover { background: linear-gradient(180deg, var(--panel), var(--bg-2)); border-color: var(--border); box-shadow: 0 10px 24px rgba(0,0,0,0.25); }
 .badge-it:hover:before { opacity: 1; }
+.product-row .badge-it:hover { color: #e8ffc4; }
+/* Product row badges: uppercase + subtle text glow matching icon color */
+.product-row .badge { text-transform: uppercase; }
+.product-row .badge-it { color: #e8ffc4; text-shadow: 0 0 12px rgba(168,255,47,0.5); }
+.product-row .badge-design { color: #ffe4e8; text-shadow: 0 0 12px rgba(251,113,133,0.45); }
+.product-row .badge-console { color: #e0f7ff; text-shadow: 0 0 12px rgba(125,211,252,0.5); }
 .badge-console:before { background: #7dd3fc; box-shadow: 0 0 12px rgba(125,211,252,0.5); }
 .badge:hover.badge-console:before { box-shadow: 0 0 24px rgba(125,211,252,0.85); }
 .badge-design:before { background: #fb7185; box-shadow: 0 0 12px rgba(251,113,133,0.5); }

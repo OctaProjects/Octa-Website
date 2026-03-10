@@ -316,14 +316,14 @@ export default function App() {
               <span className="bullet"></span>Our products
             </h2>
             <div className="product-row">
-              <div className="badge badge-it" title="it">
-                it
+              <div className="badge badge-it" title="IT">
+                IT
               </div>
-              <div className="badge badge-design" title="design">
-                design
+              <div className="badge badge-design" title="DESIGN">
+                DESIGN
               </div>
-              <div className="badge badge-console" title="web development">
-                web development
+              <div className="badge badge-console" title="WEB DEVELOPMENT">
+                WEB DEVELOPMENT
               </div>
             </div>
           </div>

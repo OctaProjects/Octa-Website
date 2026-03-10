@@ -244,6 +244,9 @@ export default function App() {
               )}
             </button>
 
+            <a href="#employee-hub" className="btn cta-employee-hub" aria-label="Employee Hub">
+              Employee Hub
+            </a>
             <a href="#partner" className="btn cta-partner">
               Become an Octa partner
             </a>

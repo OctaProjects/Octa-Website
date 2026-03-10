@@ -1,5 +1,5 @@
-/**
- * App.jsx – Main Application
+﻿/**
+ * App.jsx ΓÇô Main Application
  * Handles hash routing, theme, scroll progress, section highlighting, and page rendering.
  */
 import { useEffect, useMemo, useState } from 'react';
@@ -301,7 +301,7 @@ export default function App() {
               Always You Can<span className="dot"> .</span>
                 </h1>
                 <p className="hero-sub">
-              Your Success Requires Sophisticated Technological Expertise. Don’t Be Held Back, Stay Competitive.
+              Your Success Requires Sophisticated Technological Expertise. DonΓÇÖt Be Held Back, Stay Competitive.
                 </p>
               </div>
             </div>
@@ -319,11 +319,11 @@ export default function App() {
               <div className="badge badge-it" title="it">
                 it
               </div>
+              <div className="badge badge-console" title="console">
+                console
+              </div>
               <div className="badge badge-design" title="design">
                 design
-              </div>
-              <div className="badge badge-console" title="web development">
-                web development
               </div>
             </div>
           </div>
@@ -546,17 +546,17 @@ export default function App() {
               <div className="contact-right">
                 <div className="contact-cards">
                   <a className="contact-card" href="https://wa.me/201020300393" target="_blank" rel="noopener noreferrer">
-                    <span className="contact-card-icon contact-card-icon--wa" aria-hidden="true">✆</span>
+                    <span className="contact-card-icon contact-card-icon--wa" aria-hidden="true">Γ£å</span>
                     <span className="contact-card-kicker">WHATSAPP</span>
                     <span className="contact-card-value">+20 10 20300393</span>
                   </a>
                   <a className="contact-card" href="tel:+201020300393">
-                    <span className="contact-card-icon contact-card-icon--phone" aria-hidden="true">☎</span>
+                    <span className="contact-card-icon contact-card-icon--phone" aria-hidden="true">ΓÿÄ</span>
                     <span className="contact-card-kicker">PHONE</span>
                     <span className="contact-card-value">+20 10 20300393</span>
                   </a>
                   <a className="contact-card" href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                    <span className="contact-card-icon contact-card-icon--fb" aria-hidden="true">◎</span>
+                    <span className="contact-card-icon contact-card-icon--fb" aria-hidden="true">ΓùÄ</span>
                     <span className="contact-card-kicker">FACEBOOK</span>
                     <span className="contact-card-value">Octa.mesh</span>
                   </a>
@@ -602,7 +602,7 @@ export default function App() {
                 </details>
                 <details className="faq-item">
                   <summary>Can I become an Octa partner?</summary>
-                  <p>Yes—click “Become an Octa partner” in the header to open the partner page.</p>
+                  <p>YesΓÇöclick ΓÇ£Become an Octa partnerΓÇ¥ in the header to open the partner page.</p>
                 </details>
               </div>
             </div>
@@ -644,7 +644,7 @@ export default function App() {
                   <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96Z" /></svg>
                 </div>
                 <h3>Cloud Management</h3>
-                <p>We architect and manage robust cloud environments tailored to your specific needs. From AWS to Azure solutions—our team ensures seamless migration, cost optimization, and high-performance scalability that evolves alongside your business demands.</p>
+                <p>We architect and manage robust cloud environments tailored to your specific needs. From AWS to Azure solutionsΓÇöour team ensures seamless migration, cost optimization, and high-performance scalability that evolves alongside your business demands.</p>
               </article>
               <article className="it-helpdesk-block">
                 <div className="it-helpdesk-block-icon" aria-hidden="true">
@@ -793,8 +793,8 @@ export default function App() {
         </div>
 
         <div className="container footer-bottom">
-          <p className="footer-copyright">© {year} GFX Designs. All rights reserved.</p>
-          <p className="footer-developer">Built by <a href="https://www.linkedin.com/in/rahma-sameh" target="_blank" rel="noopener noreferrer" className="footer-dev-link">Rahma Sameh</a> · <a href="mailto:rahma.sameh@octamesh.co" className="footer-dev-link">rahma.sameh@octamesh.co</a> · <a href="https://github.com/D0NG0L" target="_blank" rel="noopener noreferrer" className="footer-dev-link">GitHub</a></p>
+          <p className="footer-copyright">┬⌐ {year} GFX Designs. All rights reserved.</p>
+          <p className="footer-developer">Built by <a href="https://www.linkedin.com/in/rahma-sameh" target="_blank" rel="noopener noreferrer" className="footer-dev-link">Rahma Sameh</a> ┬╖ <a href="mailto:rahma.sameh@octamesh.co" className="footer-dev-link">rahma.sameh@octamesh.co</a> ┬╖ <a href="https://github.com/D0NG0L" target="_blank" rel="noopener noreferrer" className="footer-dev-link">GitHub</a></p>
         </div>
       </footer>
     </>

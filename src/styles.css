@@ -417,26 +417,38 @@ section[id] { scroll-margin-top: 80px; }
 .section-title { margin: 0 0 16px; font-family: "Exo", system-ui, sans-serif; font-size: clamp(1.25rem, 1.1vw + 1rem, 1.8rem); display: flex; align-items: center; gap: 10px; }
 .bullet { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 12px rgba(168,255,47,0.8); display: inline-block; animation: glowPulse 3s ease-in-out infinite, bulletPop 0.5s ease-out backwards; }
 
-/* Products */
+/* Products - 3 buttons always in one row */
 .product-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 160px));
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
   justify-content: center;
   justify-items: center;
   align-items: center;
   padding-top: 10px;
+  max-width: 560px;
+  margin: 0 auto;
 }
-@media (max-width: 400px) {
-  .product-row { grid-template-columns: 1fr; max-width: 200px; margin: 0 auto; }
+@media (max-width: 480px) {
+  .product-row { gap: 8px; max-width: 100%; padding-left: 12px; padding-right: 12px; }
+  .product-row .badge { padding: 10px 12px; font-size: 0.9rem; max-width: none; min-width: 0; }
 }
-.badge { --bg-badge: rgba(255,255,255,0.04); display: inline-flex; align-items: center; justify-content: center; font-family: "Exo", system-ui, sans-serif; text-transform: lowercase; gap: 8px; color: var(--text); border: 1px solid var(--border); padding: 14px 18px; border-radius: 16px; width: 100%; max-width: 160px; background: linear-gradient(180deg, var(--panel), var(--bg-2)); box-shadow: 0 10px 24px rgba(0,0,0,0.25); transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
-.badge:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 28px rgba(0,0,0,0.28); border-color: #334057; animation: badgeBounce 0.6s ease-out; }
-.badge:active { transform: translateY(-2px) scale(1); }
+.badge { --bg-badge: rgba(255,255,255,0.04); position: relative; display: inline-flex; align-items: center; justify-content: center; font-family: "Exo", system-ui, sans-serif; text-transform: lowercase; gap: 8px; color: var(--text); border: 1px solid var(--border); padding: 14px 18px; border-radius: 16px; width: 100%; max-width: 160px; background: linear-gradient(180deg, var(--panel), var(--bg-2)); box-shadow: 0 10px 24px rgba(0,0,0,0.25); overflow: visible; }
+.badge:hover { box-shadow: 0 14px 28px rgba(0,0,0,0.28); border-color: #334057; }
 .badge:before { content: ""; width: 14px; height: 14px; border-radius: 4px; }
-.badge-it:before { background: #a8ff2f; box-shadow: 0 0 12px rgba(168,255,47,0.6); }
+.badge-it { animation: none !important; transition: none !important; }
+/* IT badge: no animation but same initial position as other badges so they align */
+.badge-it.will-reveal { opacity: 1 !important; transform: translateY(16px) !important; transition: none !important; }
+.badge-it.will-reveal.is-visible { transform: none !important; }
+.badge-it * { animation: none !important; transition: none !important; }
+.badge-it:before { background: #a8ff2f; box-shadow: 0 0 8px rgba(168,255,47,0.45); }
+/* IT button: no hover effect - keep same appearance */
+.badge-it:hover { background: linear-gradient(180deg, var(--panel), var(--bg-2)); color: var(--text); border-color: var(--border); box-shadow: 0 10px 24px rgba(0,0,0,0.25); }
+.badge-it:hover:before { opacity: 1; }
 .badge-console:before { background: #7dd3fc; box-shadow: 0 0 12px rgba(125,211,252,0.5); }
+.badge:hover.badge-console:before { box-shadow: 0 0 24px rgba(125,211,252,0.85); }
 .badge-design:before { background: #fb7185; box-shadow: 0 0 12px rgba(251,113,133,0.5); }
+.badge:hover.badge-design:before { box-shadow: 0 0 24px rgba(251,113,133,0.85); }
 .badge-api:before { background: #facc15; box-shadow: 0 0 12px rgba(250,204,21,0.5); }
 .badge-mesh:before { background: #a78bfa; box-shadow: 0 0 12px rgba(167,139,250,0.55); }
 
@@ -2347,11 +2359,6 @@ section[id] { scroll-margin-top: 80px; }
   0% { transform: scale(0); opacity: 0; }
   60% { transform: scale(1.2); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes badgeBounce {
-  0%, 100% { transform: translateY(-4px) scale(1.02); }
-  50% { transform: translateY(-6px) scale(1.03); }
 }
 
 @keyframes checkPop {

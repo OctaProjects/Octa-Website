@@ -1726,19 +1726,25 @@ section[id] { scroll-margin-top: 80px; }
   border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* Design page CTA – gradient panel + pill button (layout like reference images) */
+/* Design page CTA – "Ready to start your design journey" (spec: width 1232, height 546, radius 48px, padding 80 279) */
 .design-cta .container { padding-left: 24px; padding-right: 24px; }
 .design-cta-panel {
   position: relative;
   text-align: center;
-  max-width: 1232px;
-  min-height: 546px;
+  width: 100%;
+  max-width: 960px;
+  min-height: 420px;
   margin-left: auto;
   margin-right: auto;
   background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(163, 255, 0, 0.1) 100%);
   border-radius: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 80px 279px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.15);
+  padding-top: 80px;
+  padding-right: 279px;
+  padding-bottom: 80px;
+  padding-left: 279px;
   color: #fff;
   overflow: hidden;
   opacity: 1;

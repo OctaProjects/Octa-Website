@@ -30,17 +30,7 @@ export default function DesignPage() {
         <div className="container design-hero-inner">
           <div className="design-hero-text">
               <h1 className="design-hero-title">
-                <span className="design-bracket design-bracket-left" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="square">
-                    <path d="M 6 2 C 2 2 2 12 6 22" />
-                  </svg>
-                </span>
                 <span className="design-word">design</span>
-                <span className="design-bracket design-bracket-right" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="square">
-                    <path d="M 18 2 C 22 2 22 12 18 22" />
-                  </svg>
-                </span>
               </h1>
               <span className="design-pill">CREATIVE DIVISION</span>
               <h2 className="design-hero-headline">Elevate Your <span className="design-accent">Visual Identity</span>.</h2>

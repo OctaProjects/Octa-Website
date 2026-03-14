@@ -194,7 +194,7 @@ export default function App() {
           <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
         </div>
       )}
-      <header className={`site-header${isScrolled ? ' scrolled' : ''}`}>
+      <header className={`site-header${isScrolled ? ' scrolled' : ''}${page === 'web-development' ? ' page-web-dev' : ''}`}>
         <div className="container header-inner">
           <a href="#home" className="brand brand-flex" aria-label="Octa home">
             <img src={logImg} alt="Octa" className="brand-logo-img" />

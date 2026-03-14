@@ -179,15 +179,19 @@ section[id] { scroll-margin-top: 80px; }
   position: relative;
   transition: color 200ms ease, opacity 200ms ease, transform 180ms ease;
 }
-.nav a::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; background: #00D1FF; transition: width 220ms ease; }
-.nav a:hover { color: #00D1FF; }
+.nav a::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; background: var(--primary); transition: width 220ms ease; }
+.nav a:hover { color: #fff; }
 .nav a:hover::after { width: 100%; }
-.nav a.active { color: #00D1FF; }
 .nav a.active::after { width: 100%; }
 .nav a:hover { transform: translateY(-1px); }
 :root[data-theme='light'] .nav a { color: rgba(12, 17, 23, 0.85); }
-:root[data-theme='light'] .nav a:hover { color: #00D1FF; }
-:root[data-theme='light'] .nav a.active { color: #00D1FF; }
+:root[data-theme='light'] .nav a:hover { color: #0c1117; }
+/* Web Development page only: nav hover/active use #00D1FF */
+.site-header.page-web-dev .nav a::after { background: #00D1FF; }
+.site-header.page-web-dev .nav a:hover { color: #00D1FF; }
+.site-header.page-web-dev .nav a.active { color: #00D1FF; }
+:root[data-theme='light'] .site-header.page-web-dev .nav a:hover { color: #00D1FF; }
+:root[data-theme='light'] .site-header.page-web-dev .nav a.active { color: #00D1FF; }
 
 /* Become an Octa partner – white pill, same height 40px as Employee Hub */
 .cta-partner {

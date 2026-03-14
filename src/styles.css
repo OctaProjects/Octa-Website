@@ -192,6 +192,12 @@ section[id] { scroll-margin-top: 80px; }
 .site-header.page-web-dev .nav a.active { color: #00D1FF; }
 :root[data-theme='light'] .site-header.page-web-dev .nav a:hover { color: #00D1FF; }
 :root[data-theme='light'] .site-header.page-web-dev .nav a.active { color: #00D1FF; }
+/* Design page only: nav hover/active use #F43F5E */
+.site-header.page-design .nav a::after { background: #F43F5E; }
+.site-header.page-design .nav a:hover { color: #F43F5E; }
+.site-header.page-design .nav a.active { color: #F43F5E; }
+:root[data-theme='light'] .site-header.page-design .nav a:hover { color: #F43F5E; }
+:root[data-theme='light'] .site-header.page-design .nav a.active { color: #F43F5E; }
 
 /* Become an Octa partner – white pill, same height 40px as Employee Hub */
 .cta-partner {

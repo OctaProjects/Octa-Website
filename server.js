@@ -12,11 +12,11 @@ const PORT = Number(process.env.PORT || 3000)
 
 const distPath = path.join(__dirname, 'build')
 
-// Serve built assets
+// Serve built assets (Express 5 / path-to-regexp v8 rejects app.get('*', ...))
 app.use(express.static(distPath))
 
-// SPA fallback: always return index.html
-app.get('*', (_req, res) => {
+// SPA fallback: non-file routes → index.html
+app.use((_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'))
 })
 

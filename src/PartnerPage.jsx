@@ -88,7 +88,7 @@ export default function PartnerPage({ onSubmitLead }) {
                   <h2 className="partner-submit-title">
                     Thank you,
                     <br />
-                    Stay alert with your email .
+                    Stay alert with your email.
                   </h2>
                 </section>
               ) : (

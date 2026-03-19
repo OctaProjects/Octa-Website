@@ -156,7 +156,6 @@ export default function App() {
     };
 
     addReveal('.arc-wrap', 'reveal-zoom', 0, 0);
-    addReveal('.hero-title, .hero-sub', 'reveal-up', 80, 0);
     addReveal('.section-title', 'reveal-left', 80, 0);
     addReveal('.product-row .badge', 'reveal-up', 80, 100);
     addReveal('.team-v2-panel--image', 'reveal-up', 0, 0);
@@ -299,12 +298,18 @@ export default function App() {
                   strokeLinecap="round"
                 />
               </svg>
-              <div className="hero-text-inside-arc">
-                <h1 className="hero-title">
-              Always You Can<span className="dot"> .</span>
+              <div className="hero-text-inside-arc" dir="ltr" lang="en">
+                {/* LRM (\u200E) stops RTL UI from reordering Latin + punctuation */}
+                <h1 className="hero-title" lang="en">
+                  {'\u200E'}
+                  Always You Can
+                  <span className="dot">.</span>
+                  {'\u200E'}
                 </h1>
-                <p className="hero-sub">
-              Your Success Requires Sophisticated Technological Expertise. Don’t Be Held Back, Stay Competitive.
+                <p className="hero-sub" lang="en">
+                  {'\u200E'}
+                  Your Success Requires Sophisticated Technological Expertise. Don&apos;t Be Held Back, Stay Competitive.
+                  {'\u200E'}
                 </p>
               </div>
             </div>

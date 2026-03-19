@@ -295,14 +295,15 @@ section[id] { scroll-margin-top: 80px; }
    ========================================================================== */
 .hero { padding: 72px 0 32px; position: relative; }
 .hero-inner { text-align: center; }
-.arc-wrap { position: relative; max-width: 900px; margin: 0 auto; opacity: 0.95; overflow: visible; animation: arcWrapFloat 4s ease-in-out infinite; }
+/* No float: keeps hero title + arc visually steady (no “bouncing”) */
+.arc-wrap { position: relative; max-width: 900px; margin: 0 auto; opacity: 0.95; overflow: visible; }
 .arc { width: 100%; height: auto; overflow: visible; display: block; pointer-events: none; }
-.hero-text-inside-arc { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 0 40px; text-align: center; pointer-events: none; overflow: visible; }
+.hero-text-inside-arc { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 0 40px; text-align: center; pointer-events: none; overflow: visible; direction: ltr; unicode-bidi: isolate; }
 .hero-text-inside-arc * { pointer-events: auto; }
 .hero { overflow: visible; }
-.hero-title { font-family: "Exo", system-ui, sans-serif; font-weight: 700; letter-spacing: 0.4px; margin: 0; font-size: clamp(2rem, 3.6vw + 1rem, 3.2rem); white-space: normal; animation: heroTitleIn 0.8s ease-out backwards; }
-.hero-title .dot { color: var(--primary); text-shadow: 0 0 12px rgba(168,255,47,0.55); display: inline-block; will-change: text-shadow; animation: dotPulse 2.2s ease-in-out infinite; }
-.hero-sub { margin: 0; max-width: 720px; padding: 0 8px; color: var(--muted); font-size: 0.95rem; line-height: 1.6; overflow: visible; word-wrap: break-word; animation: heroSubIn 0.9s ease-out 0.2s backwards; }
+.hero-title { font-family: "Exo", system-ui, sans-serif; font-weight: 700; letter-spacing: 0.4px; margin: 0; font-size: clamp(2rem, 3.6vw + 1rem, 3.2rem); white-space: normal; direction: ltr; unicode-bidi: isolate; }
+.hero-title .dot { margin-inline-start: 0.12em; color: var(--primary); text-shadow: 0 0 12px rgba(168,255,47,0.55); display: inline-block; unicode-bidi: isolate; }
+.hero-sub { margin: 0; max-width: 720px; padding: 0 8px; color: var(--muted); font-size: 0.95rem; line-height: 1.6; overflow: visible; word-wrap: break-word; direction: ltr; unicode-bidi: isolate; }
 
 @media (min-width: 520px) {
   .hero-title,
@@ -1149,7 +1150,6 @@ section[id] { scroll-margin-top: 80px; }
   margin: 0 auto;
   opacity: 0.95;
   overflow: visible;
-  animation: arcWrapFloat 4s ease-in-out infinite;
 }
 .services-arc{
   width: 100%;
@@ -1182,7 +1182,7 @@ section[id] { scroll-margin-top: 80px; }
   letter-spacing: 0.4px;
   font-size: clamp(2rem, 3.6vw + 1rem, 3.2rem);
   white-space: normal;
-  animation: heroTitleIn 0.8s ease-out backwards;
+ 
 }
 .services-hero-sub{
   margin: 0;
@@ -1193,7 +1193,7 @@ section[id] { scroll-margin-top: 80px; }
   line-height: 1.6;
   overflow: visible;
   word-wrap: break-word;
-  animation: heroSubIn 0.9s ease-out 0.2s backwards;
+ 
 }
 
 .services-grid{
@@ -1464,7 +1464,6 @@ section[id] { scroll-margin-top: 80px; }
   margin: 0 auto;
   opacity: 0.95;
   overflow: visible;
-  animation: arcWrapFloat 4s ease-in-out infinite;
 }
 .contacts-arc{
   width: 100%;
@@ -1497,7 +1496,7 @@ section[id] { scroll-margin-top: 80px; }
   letter-spacing: 0.4px;
   font-size: clamp(2rem, 3.6vw + 1rem, 3.2rem);
   white-space: normal;
-  animation: heroTitleIn 0.8s ease-out backwards;
+ 
 }
 .contacts-hero-sub{
   margin: 0;
@@ -1508,7 +1507,7 @@ section[id] { scroll-margin-top: 80px; }
   line-height: 1.6;
   overflow: visible;
   word-wrap: break-word;
-  animation: heroSubIn 0.9s ease-out 0.2s backwards;
+ 
 }
 
 /* Creative Design page (same arc style as home) */
@@ -1560,7 +1559,7 @@ section[id] { scroll-margin-top: 80px; }
   letter-spacing: 0.4px;
   font-size: clamp(1.6rem, 3vw + 0.8rem, 2.6rem);
   white-space: nowrap;
-  animation: heroTitleIn 0.8s ease-out backwards;
+ 
 }
 @media (max-width: 480px) {
   .design-hero-title { white-space: normal; flex-wrap: wrap; justify-content: center; }
@@ -1595,7 +1594,7 @@ section[id] { scroll-margin-top: 80px; }
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.6;
-  animation: heroSubIn 0.9s ease-out 0.2s backwards;
+ 
 }
 .design-hero-actions {
   display: flex;
@@ -2452,11 +2451,6 @@ section[id] { scroll-margin-top: 80px; }
 @keyframes dotPulse {
   0%, 100% { text-shadow: 0 0 10px rgba(168,255,47,0.5); }
   50% { text-shadow: 0 0 18px rgba(168,255,47,0.95); }
-}
-
-@keyframes arcWrapFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
 }
 
 @keyframes heroTitleIn {

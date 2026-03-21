@@ -134,7 +134,7 @@ export default function PartnerPage({ onSubmitLead }) {
       <section className="section social-in-contacts">
         <div className="container">
           <div className="social-row">
-            <a className="social-icon" href="mailto:info@octamesh.co" aria-label="Email">
+            <a className="social-icon" href="mailto:sales@octamesh.co" aria-label="Email">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="3" y="5" width="18" height="14" rx="2" />
                 <path d="M3 7l9 6 9-6" />
@@ -151,12 +151,18 @@ export default function PartnerPage({ onSubmitLead }) {
                 <path d="M8.86 7.95c-.2-.47-.41-.48-.6-.5H7.7c-.2 0-.5.07-.76.36s-1 1-1 2.44 1.02 2.83 1.16 3.03c.14.2 2.02 3.24 5 4.41 2.47.98 2.97.78 3.51.73.54-.05 1.73-.71 1.98-1.41.25-.7.25-1.31.18-1.44-.07-.13-.27-.2-.57-.35-.3-.15-1.73-.85-2-.95-.27-.1-.46-.15-.66.16-.2.31-.76.95-.94 1.15-.18.2-.35.23-.65.08-.3-.15-1.26-.47-2.4-1.5-.89-.78-1.49-1.73-1.67-2.03-.18-.3-.02-.47.13-.62.13-.13.3-.35.45-.53.15-.18.2-.3.31-.51.1-.2.05-.39-.03-.54-.08-.15-.63-1.56-.86-2.14z" />
               </svg>
             </a>
-            <a className="social-icon" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+            <a className="social-icon" href="https://www.facebook.com/OctaMesh.co" target="_blank" rel="noopener" aria-label="Facebook">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
               </svg>
             </a>
-            <a className="social-icon" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <a
+              className="social-icon"
+              href="https://www.linkedin.com/company/octamesh/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3Bx%2FzKMxw0QJOM6LClySvQ6Q%3D%3D"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                 <rect x="2" y="9" width="4" height="12" />

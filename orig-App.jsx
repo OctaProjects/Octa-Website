@@ -1,4 +1,4 @@
-﻿/**
+/**
  * App.jsx ΓÇô Main Application
  * Handles hash routing, theme, scroll progress, section highlighting, and page rendering.
  */
@@ -555,12 +555,17 @@ export default function App() {
                     <span className="contact-card-kicker">PHONE</span>
                     <span className="contact-card-value">+20 10 20300393</span>
                   </a>
-                  <a className="contact-card" href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                  <a className="contact-card" href="https://www.facebook.com/OctaMesh.co" target="_blank" rel="noopener noreferrer">
                     <span className="contact-card-icon contact-card-icon--fb" aria-hidden="true">ΓùÄ</span>
                     <span className="contact-card-kicker">FACEBOOK</span>
                     <span className="contact-card-value">Octa.mesh</span>
                   </a>
-                  <a className="contact-card" href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    className="contact-card"
+                    href="https://www.linkedin.com/company/octamesh/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3Bx%2FzKMxw0QJOM6LClySvQ6Q%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <span className="contact-card-icon contact-card-icon--in" aria-hidden="true">in</span>
                     <span className="contact-card-kicker">LINKEDIN</span>
                     <span className="contact-card-value">OCTA MESH</span>
@@ -568,15 +573,23 @@ export default function App() {
                 </div>
 
                 <div className="team-v2-panel contact-map">
-                  <div className="contact-map-inner" aria-label="Location map">
+                  <a
+                    className="contact-map-inner"
+                    href="https://www.google.com/maps/search/?api=1&query=26+El+Dokki+Street%2C+El+Dokki%2C+El+Dokki+District%2C+Giza+Governorate+3750283"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open 26 El Dokki Street, El Dokki, Giza on Google Maps"
+                  >
                     <div className="contact-map-chip">
                       <div className="contact-map-pin" aria-hidden="true" />
                       <div className="contact-map-chip-text">
-                        <div className="contact-map-chip-title">Tech District</div>
-                        <div className="contact-map-chip-sub">CAIRO, DOKKI, EG 72241</div>
+                        <div className="contact-map-chip-title">26 El Dokki Street</div>
+                        <div className="contact-map-chip-sub">
+                          El Dokki, El Dokki District, Giza Governorate 3750283
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -737,7 +750,7 @@ export default function App() {
             <div className="footer-social">
               <a
                 className="footer-social-btn"
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/octamesh/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3Bx%2FzKMxw0QJOM6LClySvQ6Q%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -754,7 +767,7 @@ export default function App() {
                   <circle cx="4" cy="4" r="2" fill="currentColor" />
                 </svg>
               </a>
-              <a className="footer-social-btn" href="mailto:info@octamesh.co" aria-label="Email">
+              <a className="footer-social-btn" href="mailto:sales@octamesh.co" aria-label="Email">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
                     d="M4 4h16v16H4V4Z"
@@ -773,7 +786,7 @@ export default function App() {
               </a>
               <a
                 className="footer-social-btn"
-                href="https://github.com/D0NG0L"
+                href="https://github.com/OctaProjects"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"

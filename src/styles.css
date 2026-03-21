@@ -2380,25 +2380,29 @@ section[id] { scroll-margin-top: 80px; }
   font-family: "Exo", system-ui, sans-serif;
   font-size: 1.05rem;
 }
-/* Extra air under “Send us a message” + between each labeled field */
+/* Contacts form: extra space below “Send us a message” heading */
 .contacts-grid .contact-form-title {
   margin: 0 0 36px;
 }
+/* Contacts form: vertical gap between each field row */
 .contacts-grid .contact-form {
   max-width: none;
   margin: 0;
   display: grid;
   gap: 30px;
 }
+/* Contacts form: floating label alignment (matches input padding) */
 .contacts-grid .field label {
   left: 16px;
   top: 12px;
 }
+/* Contacts form: room above typed text for floating label */
 .contacts-grid .field input,
 .contacts-grid .field textarea,
 .contacts-grid .field select {
   padding: 28px 16px 12px 16px;
 }
+/* Contacts form: message field default height */
 .contacts-grid .field textarea {
   min-height: 120px;
 }
@@ -2409,6 +2413,7 @@ section[id] { scroll-margin-top: 80px; }
   gap: 22px;
 }
 .contact-form-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* Contacts form: space above submit button */
 .contact-submit{
   width: 100%;
   margin-top: 8px;
@@ -2546,7 +2551,9 @@ a.contact-map-inner:focus-visible {
   .contacts-grid { gap: 28px; margin-top: 22px; }
   .contact-form-row{ grid-template-columns: 1fr; }
   .contacts-grid .contact-form-row { gap: 16px; }
+  /* Contacts form (narrow): slightly tighter row gap */
   .contacts-grid .contact-form { gap: 22px; }
+  /* Contacts form (narrow): heading margin under title */
   .contacts-grid .contact-form-title { margin-bottom: 28px; }
   .contact-cards{ grid-template-columns: 1fr; gap: 18px; }
   .contact-map-inner { height: 180px; border-radius: 14px; }

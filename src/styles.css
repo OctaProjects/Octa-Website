@@ -755,7 +755,7 @@ section[id] { scroll-margin-top: 80px; }
   color: rgba(12, 17, 23, 0.68);
 }
 :root[data-theme='light'] .footer-bottom {
-  color: rgba(12, 17, 23, 0.55);
+  color: rgba(12, 17, 23, 0.72);
   border-top-color: rgba(38, 58, 22, 0.1);
 }
 :root[data-theme='light'] .footer-social-btn {
@@ -2647,7 +2647,7 @@ a.contact-map-inner:focus-visible {
   padding-top: 18px;
   border-top: 1px solid rgba(255,255,255,0.06);
   text-align: center;
-  color: rgba(148,163,184,0.72);
+  color: rgba(203, 213, 225, 0.88);
   font-size: 0.85rem;
 }
 .footer-bottom p{ margin: 0; }
@@ -2656,8 +2656,24 @@ a.contact-map-inner:focus-visible {
   .footer-developer { font-size: 0.8rem; }
   .footer-developer a { word-break: break-all; }
 }
-.footer-dev-link{ color: var(--primary); text-decoration: none; }
-.footer-dev-link:hover{ color: var(--accent); text-decoration: underline; }
+/* Developer credit links — no underline */
+.footer-dev-link{
+  text-decoration: none;
+}
+/* Dark theme: readable lime on #0c1117 */
+:root:not([data-theme='light']) .footer-dev-link{
+  color: #c8f06a;
+}
+:root:not([data-theme='light']) .footer-dev-link:hover{
+  color: #d8f58a;
+}
+/* Light theme: dark green (lime primary fails on light lime bg) */
+:root[data-theme='light'] .footer-dev-link {
+  color: #0f2910;
+}
+:root[data-theme='light'] .footer-dev-link:hover {
+  color: #0a1f0b;
+}
 
 @media (max-width: 920px){
   .footer-top{ grid-template-columns: 1fr 1fr; }

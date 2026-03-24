@@ -747,6 +747,13 @@ section[id] { scroll-margin-top: 80px; }
 :root[data-theme='light'] .footer-tagline {
   color: rgba(12, 17, 23, 0.62);
 }
+:root[data-theme='light'] .footer-logo-img {
+  filter: brightness(0) saturate(100%);
+}
+:root[data-theme='light'] .footer-logo:hover .footer-logo-img {
+  filter: brightness(0) saturate(100%);
+  opacity: 0.88;
+}
 :root[data-theme='light'] .footer-heading {
   color: #0c1117;
 }

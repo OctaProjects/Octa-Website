@@ -4,6 +4,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import logImg from './assets/log-img.png';
+import octaLogo from './assets/octa-logo.png';
 import meetOurTeamImg from './assets/meet-our-team.png';
 import PartnerPage from './PartnerPage.jsx';
 import DesignPage from './DesignPage.jsx';
@@ -17,7 +18,8 @@ export default function App() {
     const pageKey = key.toLowerCase();
     if (!pageKey || pageKey === 'home') return 'home';
     if (pageKey === 'partner') return 'partner';
-    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design', 'web-development']);
+    if (pageKey === 'employee-hub') return 'employees-login';
+    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design', 'web-development', 'employees-login']);
     return allowed.has(pageKey) ? pageKey : 'home';
   };
 
@@ -28,6 +30,11 @@ export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginIdentifier, setLoginIdentifier] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginBusy, setLoginBusy] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [theme, setTheme] = useState(() => {
     try {
       const saved = window.localStorage.getItem('octa_theme');
@@ -58,6 +65,11 @@ export default function App() {
       // ignore
     }
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('login-route', page === 'employees-login');
+    return () => document.documentElement.classList.remove('login-route');
+  }, [page]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: page === 'home' ? 'auto' : 'smooth' });
@@ -183,8 +195,37 @@ export default function App() {
 
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
   const isHomePage = page === 'home';
+  const isEmployeesLogin = page === 'employees-login';
   const shouldShow = (id) => isHomePage || page === id;
   const isItHelpdeskPage = page === 'it-helpdesk';
+
+  const submitEmployeesLogin = async (e) => {
+    e.preventDefault();
+    if (loginBusy) return;
+    setLoginError('');
+    setLoginBusy(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          email: String(loginIdentifier || '').trim(),
+          password: loginPassword,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setLoginError(data?.error || 'Login failed. Please try again.');
+        return;
+      }
+      window.location.hash = '#home';
+    } catch {
+      setLoginError('Network error. Please try again.');
+    } finally {
+      setLoginBusy(false);
+    }
+  };
 
   return (
     <>
@@ -193,6 +234,7 @@ export default function App() {
           <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
         </div>
       )}
+      {!isEmployeesLogin && (
       <header className={`site-header${isScrolled ? ' scrolled' : ''}${page === 'web-development' ? ' page-web-dev' : ''}${page === 'creative-design' ? ' page-design' : ''}`}>
         <div className="container header-inner">
           <a href="#home" className="brand brand-flex" aria-label="Octa home">
@@ -243,8 +285,8 @@ export default function App() {
               )}
             </button>
 
-            <a href="#employee-hub" className="btn cta-employee-hub" aria-label="Employee Hub">
-              Employee Hub
+            <a href="#employees-login" className="btn cta-employee-hub" aria-label="Employees Login">
+              Employees Login
             </a>
             <a href="#partner" className="btn cta-partner">
               Become an Octa partner
@@ -252,6 +294,7 @@ export default function App() {
           </div>
         </div>
       </header>
+      )}
 
       {showPartner ? (
         <div className="page-transition">
@@ -269,6 +312,99 @@ export default function App() {
         <div className="page-transition">
           <WebDevelopmentPage />
         </div>
+      ) : page === 'employees-login' ? (
+        <main className="employee-login-page">
+          <div className="employee-login-shell">
+            <a href="#home" className="employee-login-top-logo" aria-label="Octa home">
+              <img src={octaLogo} alt="Octa" className="employee-login-logo" />
+            </a>
+
+            <div className="employee-login-card">
+              <h1 className="employee-login-title">Welcome Back</h1>
+              <p className="employee-login-sub">Sign in to your OCTA secure dashboard</p>
+
+              <form className="employee-login-form" onSubmit={submitEmployeesLogin}>
+                <div className="login-field">
+                  <label className="login-label" htmlFor="employeeLoginId">Employee ID or Email</label>
+                  <div className="login-input">
+                    <span className="login-input-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                    <input
+                      id="employeeLoginId"
+                      name="employeeLoginId"
+                      autoComplete="username"
+                      value={loginIdentifier}
+                      onChange={(e) => setLoginIdentifier(e.target.value)}
+                      placeholder="Enter your ID or email"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="login-field">
+                  <div className="login-row">
+                    <label className="login-label" htmlFor="employeeLoginPassword">Password</label>
+                    <a className="login-link" href="mailto:sales@octamesh.co">Forgot Password?</a>
+                  </div>
+                  <div className="login-input">
+                    <span className="login-input-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M5 11h14v10H5V11Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                    <input
+                      id="employeeLoginPassword"
+                      name="employeeLoginPassword"
+                      type={showLoginPassword ? 'text' : 'password'}
+                      autoComplete="current-password"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="login-input-toggle"
+                      onClick={() => setShowLoginPassword((v) => !v)}
+                      aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <label className="login-check">
+                  <input type="checkbox" name="rememberDevice" />
+                  <span>Remember this device</span>
+                </label>
+
+                {loginError && <div className="employee-login-error" role="alert">{loginError}</div>}
+
+                <button className="employee-login-submit" type="submit" disabled={loginBusy}>
+                  {loginBusy ? 'Signing in…' : 'Sign In'}
+                </button>
+              </form>
+
+              <div className="employee-login-bottom">
+                <span className="employee-login-bottom-muted">New to the team?</span>{' '}
+                <a className="login-link login-link-strong" href="mailto:sales@octamesh.co">Contact IT Support</a>
+              </div>
+            </div>
+
+            <nav className="employee-login-legal" aria-label="Legal">
+              <a href="#home">Privacy Policy</a>
+              <a href="#home">Terms of Service</a>
+              <a href="#home">System Status</a>
+            </nav>
+          </div>
+        </main>
       ) : (
       <main id="home">
         {isHomePage && (
@@ -710,6 +846,7 @@ export default function App() {
       </main>
       )}
 
+      {!isEmployeesLogin && (
       <footer className="site-footer">
         <div className="container footer-top">
           <div className="footer-brand">
@@ -818,6 +955,7 @@ export default function App() {
           <p className="footer-developer">Built by <a href="https://www.linkedin.com/in/rahma-sameh" target="_blank" rel="noopener noreferrer" className="footer-dev-link">Rahma Sameh</a> · <a href="mailto:rahma.sameh@octamesh.co" className="footer-dev-link">rahma.sameh@octamesh.co</a> · <a href="https://github.com/D0NG0L" target="_blank" rel="noopener noreferrer" className="footer-dev-link">GitHub</a></p>
         </div>
       </footer>
+      )}
     </>
   );
 }

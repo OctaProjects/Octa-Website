@@ -12,5 +12,8 @@ export default defineConfig({
   server: {
     // Avoid "UNKNOWN: unknown error, watch" on network/mapped drives (e.g. Z:)
     watch: { usePolling: true },
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
   },
 })

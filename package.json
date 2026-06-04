@@ -5,11 +5,14 @@
   "type": "module",
   "author": "Rahma Sameh <rahma.sameh@octamesh.co> (https://www.linkedin.com/in/rahma-sameh/)",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "concurrently -k -n api,web -c blue,green \"npm run start\" \"wait-on -t 30000 http://127.0.0.1:3000/api/health && vite --open\"",
+    "dev:web": "vite --open",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed": "node scripts/seed-hub.mjs",
+    "postinstall": "prisma generate && npm rebuild better-sqlite3"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
@@ -28,11 +31,13 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^10.0.3",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "prisma": "^7.8.0",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "wait-on": "^9.0.10"
   }
 }

@@ -10,6 +10,7 @@ import PartnerPage from './PartnerPage.jsx';
 import DesignPage from './DesignPage.jsx';
 import WebDevelopmentPage from './WebDevelopmentPage.jsx';
 import AboutPage from './AboutPage.jsx';
+import EmployeeHubPage from './EmployeeHubPage.jsx';
 
 export default function App() {
   const normalizePage = (hash) => {
@@ -18,8 +19,7 @@ export default function App() {
     const pageKey = key.toLowerCase();
     if (!pageKey || pageKey === 'home') return 'home';
     if (pageKey === 'partner') return 'partner';
-    if (pageKey === 'employee-hub') return 'employees-login';
-    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design', 'web-development', 'employees-login']);
+    const allowed = new Set(['about', 'services', 'contacts', 'faqs', 'products', 'team', 'it-helpdesk', 'creative-design', 'web-development', 'employees-login', 'employee-hub']);
     return allowed.has(pageKey) ? pageKey : 'home';
   };
 
@@ -68,7 +68,11 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('login-route', page === 'employees-login');
-    return () => document.documentElement.classList.remove('login-route');
+    document.documentElement.classList.toggle('hub-route', page === 'employee-hub');
+    return () => {
+      document.documentElement.classList.remove('login-route');
+      document.documentElement.classList.remove('hub-route');
+    };
   }, [page]);
 
   useEffect(() => {
@@ -196,6 +200,8 @@ export default function App() {
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
   const isHomePage = page === 'home';
   const isEmployeesLogin = page === 'employees-login';
+  const isEmployeeHub = page === 'employee-hub';
+  const isPortalRoute = isEmployeesLogin || isEmployeeHub;
   const shouldShow = (id) => isHomePage || page === id;
   const isItHelpdeskPage = page === 'it-helpdesk';
 
@@ -214,14 +220,23 @@ export default function App() {
           password: loginPassword,
         }),
       });
-      const data = await res.json().catch(() => ({}));
+      const contentType = res.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? await res.json().catch(() => ({}))
+        : {};
       if (!res.ok) {
-        setLoginError(data?.error || 'Login failed. Please try again.');
+        if (data?.error === 'invalid_credentials') {
+          setLoginError('Invalid email or password. Use admin@octamesh.co / Admin123! after running npm run seed.');
+        } else if (res.status === 404 || !contentType.includes('application/json')) {
+          setLoginError('API server is not running. Run: npm run dev (starts API + website).');
+        } else {
+          setLoginError(data?.error || 'Login failed. Please try again.');
+        }
         return;
       }
-      window.location.hash = '#home';
+      window.location.hash = '#employee-hub';
     } catch {
-      setLoginError('Network error. Please try again.');
+      setLoginError('Cannot reach API. Run npm run dev in the project folder (starts server on port 3000).');
     } finally {
       setLoginBusy(false);
     }
@@ -234,7 +249,7 @@ export default function App() {
           <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
         </div>
       )}
-      {!isEmployeesLogin && (
+      {!isPortalRoute && (
       <header className={`site-header${isScrolled ? ' scrolled' : ''}${page === 'web-development' ? ' page-web-dev' : ''}${page === 'creative-design' ? ' page-design' : ''}`}>
         <div className="container header-inner">
           <a href="#home" className="brand brand-flex" aria-label="Octa home">
@@ -312,6 +327,8 @@ export default function App() {
         <div className="page-transition">
           <WebDevelopmentPage />
         </div>
+      ) : page === 'employee-hub' ? (
+        <EmployeeHubPage />
       ) : page === 'employees-login' ? (
         <main className="employee-login-page">
           <div className="employee-login-shell">
@@ -322,6 +339,9 @@ export default function App() {
             <div className="employee-login-card">
               <h1 className="employee-login-title">Welcome Back</h1>
               <p className="employee-login-sub">Sign in to your OCTA secure dashboard</p>
+              <p className="employee-login-demo" role="note">
+                Demo login (after <code>npm run seed</code>): <strong>admin@octamesh.co</strong> / <strong>Admin123!</strong>
+              </p>
 
               <form className="employee-login-form" onSubmit={submitEmployeesLogin}>
                 <div className="login-field">
@@ -846,7 +866,7 @@ export default function App() {
       </main>
       )}
 
-      {!isEmployeesLogin && (
+      {!isPortalRoute && (
       <footer className="site-footer">
         <div className="container footer-top">
           <div className="footer-brand">

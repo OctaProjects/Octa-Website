@@ -29,6 +29,8 @@ model User {
 
   createdBookmarks Bookmark[] @relation("BookmarksCreatedBy")
   updatedBookmarks Bookmark[] @relation("BookmarksUpdatedBy")
+  createdAnnouncements Announcement[] @relation("AnnouncementsCreatedBy")
+  updatedAnnouncements Announcement[] @relation("AnnouncementsUpdatedBy")
   auditLogs        AuditLog[]
 }
 
@@ -65,6 +67,27 @@ model Bookmark {
   @@index([categoryId])
   @@index([title])
   @@index([updatedAt])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  excerpt     String
+  tag         String
+  tagClass    String   @default("hub-tag--green")
+  isActive    Boolean  @default(true)
+  publishedAt DateTime @default(now())
+
+  createdById String
+  createdBy   User     @relation("AnnouncementsCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  updatedById String
+  updatedBy   User     @relation("AnnouncementsUpdatedBy", fields: [updatedById], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, publishedAt])
 }
 
 model AuditLog {

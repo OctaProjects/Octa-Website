@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url'
 import 'dotenv/config'
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
 import { PrismaClient } from './src/generated/prisma/client.ts'
+import { registerAdminRoutes } from './server/routes/admin.js'
+import { registerHubRoutes } from './server/routes/hub.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -16,11 +18,9 @@ const app = express()
 const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL })
 const prisma = new PrismaClient({ adapter })
 
-// cPanel provides PORT in environment variables
 const PORT = Number(process.env.PORT || 3000)
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-insecure-secret'
 const COOKIE_NAME = 'octa_session'
-
 const distPath = path.join(__dirname, 'build')
 
 app.disable('x-powered-by')
@@ -64,8 +64,7 @@ async function requireAuth(req, res, next) {
   try {
     const token = req.cookies?.[COOKIE_NAME]
     if (!token) return res.status(401).json({ error: 'unauthorized' })
-    const payload = jwt.verify(token, JWT_SECRET)
-    req.auth = payload
+    req.auth = jwt.verify(token, JWT_SECRET)
     return next()
   } catch {
     return res.status(401).json({ error: 'unauthorized' })
@@ -77,7 +76,9 @@ function requireAdmin(req, res, next) {
   return next()
 }
 
-// --- API ---
+const routeDeps = { prisma, requireAuth, requireAdmin, audit }
+
+// --- Health & auth ---
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 
 app.post('/api/auth/login', async (req, res) => {
@@ -89,14 +90,14 @@ app.post('/api/auth/login', async (req, res) => {
     await audit(req, { action: 'auth.login_failed', metadata: { email } })
     return res.status(401).json({ error: 'invalid_credentials' })
   }
-  const ok = await bcrypt.compare(String(password), user.passwordHash)
-  if (!ok) {
+
+  const passwordOk = await bcrypt.compare(String(password), user.passwordHash)
+  if (!passwordOk) {
     await audit(req, { actorId: user.id, action: 'auth.login_failed' })
     return res.status(401).json({ error: 'invalid_credentials' })
   }
 
-  const token = signSession(user)
-  res.cookie(COOKIE_NAME, token, {
+  res.cookie(COOKIE_NAME, signSession(user), {
     httpOnly: true,
     sameSite: 'lax',
     secure: false,
@@ -120,219 +121,11 @@ app.get('/api/auth/me', requireAuth, async (req, res) => {
   return res.json({ user: { id: user.id, email: user.email, name: user.name, role: user.role } })
 })
 
-// Public bookmarks listing for authenticated users
-app.get('/api/bookmarks', requireAuth, async (req, res) => {
-  const { q, categoryId, sort = 'updatedAt_desc' } = req.query
+registerHubRoutes(app, routeDeps)
+registerAdminRoutes(app, routeDeps)
 
-  const orderBy =
-    sort === 'name_asc' ? { title: 'asc' } :
-    sort === 'name_desc' ? { title: 'desc' } :
-    sort === 'createdAt_desc' ? { createdAt: 'desc' } :
-    sort === 'createdAt_asc' ? { createdAt: 'asc' } :
-    sort === 'updatedAt_asc' ? { updatedAt: 'asc' } :
-    { updatedAt: 'desc' }
-
-  const where = {
-    isActive: true,
-    ...(categoryId ? { categoryId: String(categoryId) } : {}),
-    ...(q
-      ? {
-          OR: [
-            { title: { contains: String(q) } },
-            { description: { contains: String(q) } },
-            { tags: { contains: String(q) } },
-            { url: { contains: String(q) } },
-          ],
-        }
-      : {}),
-  }
-
-  const items = await prisma.bookmark.findMany({
-    where,
-    orderBy,
-    include: { category: true },
-  })
-  return res.json({ items })
-})
-
-app.get('/api/categories', requireAuth, async (_req, res) => {
-  const items = await prisma.category.findMany({ orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }] })
-  return res.json({ items })
-})
-
-app.get('/api/announcements', requireAuth, async (req, res) => {
-  const limit = Math.min(50, Math.max(1, Number(req.query.limit || 12)))
-  const items = await prisma.announcement.findMany({
-    where: { isActive: true },
-    orderBy: { publishedAt: 'desc' },
-    take: limit,
-    select: {
-      id: true,
-      title: true,
-      excerpt: true,
-      tag: true,
-      tagClass: true,
-      publishedAt: true,
-    },
-  })
-  return res.json({ items })
-})
-
-// Admin CRUD
-app.post('/api/admin/bootstrap', async (req, res) => {
-  // One-time creation of first admin if no users exist yet
-  const count = await prisma.user.count()
-  if (count > 0) return res.status(409).json({ error: 'already_initialized' })
-
-  const { email, password, name } = req.body || {}
-  if (!email || !password) return res.status(400).json({ error: 'email_and_password_required' })
-  const passwordHash = await bcrypt.hash(String(password), 12)
-  const user = await prisma.user.create({
-    data: {
-      email: String(email).toLowerCase().trim(),
-      name: name ? String(name).trim() : null,
-      passwordHash,
-      role: 'ADMIN',
-    },
-  })
-  await audit(req, { actorId: user.id, action: 'admin.bootstrap' })
-  return res.json({ ok: true })
-})
-
-app.get('/api/admin/logs', requireAuth, requireAdmin, async (req, res) => {
-  const limit = Math.min(200, Math.max(1, Number(req.query.limit || 50)))
-  const items = await prisma.auditLog.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: limit,
-    include: { actor: { select: { id: true, email: true, name: true, role: true } } },
-  })
-  return res.json({ items })
-})
-
-app.get('/api/admin/bookmarks', requireAuth, requireAdmin, async (_req, res) => {
-  const items = await prisma.bookmark.findMany({
-    orderBy: { updatedAt: 'desc' },
-    include: { category: true },
-  })
-  return res.json({ items })
-})
-
-app.post('/api/admin/bookmarks', requireAuth, requireAdmin, async (req, res) => {
-  const { title, url, description, categoryId, tags, isActive } = req.body || {}
-  if (!title || !url) return res.status(400).json({ error: 'title_and_url_required' })
-  const item = await prisma.bookmark.create({
-    data: {
-      title: String(title).trim(),
-      url: String(url).trim(),
-      description: description ? String(description).trim() : null,
-      tags: tags ? String(tags).trim() : null,
-      categoryId: categoryId ? String(categoryId) : null,
-      isActive: isActive !== false,
-      createdById: req.auth.sub,
-      updatedById: req.auth.sub,
-    },
-    include: { category: true },
-  })
-  await audit(req, { actorId: req.auth.sub, action: 'bookmark.create', entityType: 'bookmark', entityId: item.id })
-  return res.status(201).json({ item })
-})
-
-app.patch('/api/admin/bookmarks/:id', requireAuth, requireAdmin, async (req, res) => {
-  const { id } = req.params
-  const existing = await prisma.bookmark.findUnique({ where: { id } })
-  if (!existing) return res.status(404).json({ error: 'not_found' })
-  const { title, url, description, categoryId, tags, isActive } = req.body || {}
-  const item = await prisma.bookmark.update({
-    where: { id },
-    data: {
-      ...(title !== undefined ? { title: String(title).trim() } : {}),
-      ...(url !== undefined ? { url: String(url).trim() } : {}),
-      ...(description !== undefined ? { description: description ? String(description).trim() : null } : {}),
-      ...(tags !== undefined ? { tags: tags ? String(tags).trim() : null } : {}),
-      ...(categoryId !== undefined ? { categoryId: categoryId ? String(categoryId) : null } : {}),
-      ...(isActive !== undefined ? { isActive: Boolean(isActive) } : {}),
-      updatedById: req.auth.sub,
-    },
-    include: { category: true },
-  })
-  await audit(req, { actorId: req.auth.sub, action: 'bookmark.update', entityType: 'bookmark', entityId: item.id })
-  return res.json({ item })
-})
-
-app.delete('/api/admin/bookmarks/:id', requireAuth, requireAdmin, async (req, res) => {
-  const { id } = req.params
-  const existing = await prisma.bookmark.findUnique({ where: { id } })
-  if (!existing) return res.status(404).json({ error: 'not_found' })
-  const item = await prisma.bookmark.update({
-    where: { id },
-    data: { isActive: false, updatedById: req.auth.sub },
-    include: { category: true },
-  })
-  await audit(req, { actorId: req.auth.sub, action: 'bookmark.delete', entityType: 'bookmark', entityId: item.id })
-  return res.json({ item })
-})
-
-app.get('/api/admin/announcements', requireAuth, requireAdmin, async (_req, res) => {
-  const items = await prisma.announcement.findMany({ orderBy: { publishedAt: 'desc' } })
-  return res.json({ items })
-})
-
-app.post('/api/admin/announcements', requireAuth, requireAdmin, async (req, res) => {
-  const { title, excerpt, tag, tagClass, publishedAt, isActive } = req.body || {}
-  if (!title || !excerpt || !tag) return res.status(400).json({ error: 'title_excerpt_tag_required' })
-  const item = await prisma.announcement.create({
-    data: {
-      title: String(title).trim(),
-      excerpt: String(excerpt).trim(),
-      tag: String(tag).trim(),
-      tagClass: tagClass ? String(tagClass).trim() : 'hub-tag--green',
-      isActive: isActive !== false,
-      publishedAt: publishedAt ? new Date(publishedAt) : new Date(),
-      createdById: req.auth.sub,
-      updatedById: req.auth.sub,
-    },
-  })
-  await audit(req, { actorId: req.auth.sub, action: 'announcement.create', entityType: 'announcement', entityId: item.id })
-  return res.status(201).json({ item })
-})
-
-app.patch('/api/admin/announcements/:id', requireAuth, requireAdmin, async (req, res) => {
-  const { id } = req.params
-  const existing = await prisma.announcement.findUnique({ where: { id } })
-  if (!existing) return res.status(404).json({ error: 'not_found' })
-  const { title, excerpt, tag, tagClass, publishedAt, isActive } = req.body || {}
-  const item = await prisma.announcement.update({
-    where: { id },
-    data: {
-      ...(title !== undefined ? { title: String(title).trim() } : {}),
-      ...(excerpt !== undefined ? { excerpt: String(excerpt).trim() } : {}),
-      ...(tag !== undefined ? { tag: String(tag).trim() } : {}),
-      ...(tagClass !== undefined ? { tagClass: String(tagClass).trim() } : {}),
-      ...(isActive !== undefined ? { isActive: Boolean(isActive) } : {}),
-      ...(publishedAt !== undefined ? { publishedAt: new Date(publishedAt) } : {}),
-      updatedById: req.auth.sub,
-    },
-  })
-  await audit(req, { actorId: req.auth.sub, action: 'announcement.update', entityType: 'announcement', entityId: item.id })
-  return res.json({ item })
-})
-
-app.delete('/api/admin/announcements/:id', requireAuth, requireAdmin, async (req, res) => {
-  const { id } = req.params
-  const existing = await prisma.announcement.findUnique({ where: { id } })
-  if (!existing) return res.status(404).json({ error: 'not_found' })
-  const item = await prisma.announcement.update({
-    where: { id },
-    data: { isActive: false, updatedById: req.auth.sub },
-  })
-  await audit(req, { actorId: req.auth.sub, action: 'announcement.delete', entityType: 'announcement', entityId: item.id })
-  return res.json({ item })
-})
-
-// Serve built assets (Express 5 / path-to-regexp v8 rejects app.get('*', ...))
 app.use(express.static(distPath))
 
-// SPA fallback: non-file routes → index.html
 app.use((_req, res) => {
   const indexPath = path.join(distPath, 'index.html')
   if (!fs.existsSync(indexPath)) {
@@ -351,4 +144,3 @@ app.use((_req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-
